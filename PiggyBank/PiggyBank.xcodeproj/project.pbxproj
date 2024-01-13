@@ -83,6 +83,8 @@
 			dependencies = (
 			);
 			name = PiggyBank;
+			packageProductDependencies = (
+			);
 			productName = PiggyBank;
 			productReference = ABA0A4FE2B51DC2F00A8B7BA /* PiggyBank.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +113,8 @@
 				Base,
 			);
 			mainGroup = ABA0A4F52B51DC2F00A8B7BA;
+			packageReferences = (
+			);
 			productRefGroup = ABA0A4FF2B51DC2F00A8B7BA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

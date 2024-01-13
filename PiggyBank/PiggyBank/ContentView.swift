@@ -8,12 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var name: String = ""
     var body: some View {
         VStack(spacing: 0) {
             Image("PiggyBank Icon")
             Text("PiggyBank")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+            Spacer()
+                .frame(height: 30)
+            Text("Enter your mobile number")
+                .font(.title2)
+                .fontWeight(.medium)
+            Spacer()
+                .frame(height: 20)
+            TextField("(555)-369-1984", text: $name)
+                .padding(.all)
+                .background(.white)
+                .cornerRadius(10.0)
+            Spacer()
+                .frame(height: 30)
+            Button {
+                
+            } label: {
+                Text("Get Verification Code")
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color.white)
+            }
+                .padding(.all)
+                .background(Color(hue: 331.0, saturation: 0.38, brightness: 0.94))
+                .cornerRadius(10.0)
             Spacer()
         }
         .padding()
