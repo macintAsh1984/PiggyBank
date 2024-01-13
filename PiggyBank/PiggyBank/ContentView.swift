@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State var name: String = ""
+    @State var countryCode: String = ""
+    let countryCodes = ["🇺🇸 US +1"]
     var body: some View {
         VStack(spacing: 0) {
             Image("PiggyBank Icon")
@@ -22,10 +24,19 @@ struct ContentView: View {
                 .fontWeight(.medium)
             Spacer()
                 .frame(height: 20)
-            TextField("(555)-369-1984", text: $name)
-                .padding(.all)
+            HStack {
+                Picker("Country Code", selection: $countryCode) {
+                    Text(countryCodes[0])
+                }
+                .frame(height: 22)
+                .padding(.vertical)
                 .background(.white)
                 .cornerRadius(10.0)
+                TextField("(555)-369-1984", text: $name)
+                    .padding(.all)
+                    .background(.white)
+                    .cornerRadius(10.0)
+            }
             Spacer()
                 .frame(height: 30)
             Button {
