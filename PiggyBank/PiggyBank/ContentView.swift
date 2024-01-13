@@ -10,7 +10,9 @@ import SwiftUI
 struct ContentView: View {
     @State var name: String = ""
     @State var countryCode: String = ""
+    @FocusState var numberIsFocused: Bool
     let countryCodes = ["🇺🇸 US +1"]
+    
     var body: some View {
         VStack(spacing: 0) {
             Image("PiggyBank Icon")
@@ -33,6 +35,8 @@ struct ContentView: View {
                 .background(.white)
                 .cornerRadius(10.0)
                 TextField("(555)-369-1984", text: $name)
+                    .focused($numberIsFocused)
+                    .keyboardType(.numberPad)
                     .padding(.all)
                     .background(.white)
                     .cornerRadius(10.0)
@@ -40,7 +44,7 @@ struct ContentView: View {
             Spacer()
                 .frame(height: 30)
             Button {
-                
+                numberIsFocused = false
             } label: {
                 Text("Get Verification Code")
                     .fontWeight(.semibold)
@@ -54,6 +58,9 @@ struct ContentView: View {
         .padding()
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
         .background(Color(hue: 324.0, saturation: 0.15, brightness: 0.97))
+        .onTapGesture {
+            numberIsFocused = false
+        }
     }
 }
 
