@@ -10,12 +10,17 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Image("PiggyBank Icon")
+                .resizable()
+                .frame(width: 477.0, height: 332.0)
+            Spacer()
+            Text("PiggyBank")
+                .font(.largeTitle)
+                .fontWeight(.bold)
         }
         .padding()
+        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+        .background(Color(hue: 324.0, saturation: 0.15, brightness: 0.97))
     }
 }
 
