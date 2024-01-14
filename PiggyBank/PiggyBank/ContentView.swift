@@ -9,14 +9,18 @@ import SwiftUI
 import PhoneNumberKit
 
 let phoneNumberKit = PhoneNumberKit()
+let appBackgroundColor = Color(hue: 324.0, saturation: 0.15, brightness: 0.97)
+let buttonBackgroundColor = Color(hue: 331.0, saturation: 0.38, brightness: 0.94)
+let roundedCornerRadius = 10.0
+
+let countryCodes = ["🇺🇸 US +1"]
+let invalidPhoneNumberPrompt = "Invalid Phone Number"
 
 struct ContentView: View {
     @State var phoneNumber: String = ""
     @State var countryCode: String = ""
     @State var invalidNumberAlert = false
     @FocusState var numberIsFocused: Bool
-    
-    let countryCodes = ["🇺🇸 US +1"]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -40,47 +44,54 @@ struct ContentView: View {
                 .frame(height: 22)
                 .padding(.vertical)
                 .background(.white)
-                .cornerRadius(10.0)
+                .cornerRadius(roundedCornerRadius)
                 TextField("(555)-369-1984", text: $phoneNumber)
                     .focused($numberIsFocused)
                     .keyboardType(.numberPad)
                     .padding(.all)
                     .background(.white)
-                    .cornerRadius(10.0)
+                    .cornerRadius(roundedCornerRadius)
                     .onChange(of: phoneNumber) {
                         phoneNumber = PartialFormatter().formatPartial(phoneNumber)
                     }
             }
             Spacer()
                 .frame(height: 30)
-            Button {
-                numberIsFocused = false
-                do {
-                    let parsedNumber = try phoneNumberKit.parse(phoneNumber)
-                    let formattedPhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
-                } catch {
-                    invalidNumberAlert = true
-                }
-            } label: {
-                Text("Get Verification Code")
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color.white)
-            }
-                .padding(.all)
-                .background(Color(hue: 331.0, saturation: 0.38, brightness: 0.94))
-                .cornerRadius(10.0)
-                .alert("Invalid Phone Number", isPresented: $invalidNumberAlert) {
-                    Button("OK") { }
-                }
-
+            VerificationButtonView(phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused, invalidNumberAlert: $invalidNumberAlert)
             Spacer()
         }
         .padding()
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
-        .background(Color(hue: 324.0, saturation: 0.15, brightness: 0.97))
+        .background(appBackgroundColor)
         .onTapGesture {
             numberIsFocused = false
         }
+    }
+}
+
+struct VerificationButtonView: View {
+    @Binding var phoneNumber: String
+    @FocusState.Binding var numberIsFocused: Bool
+    @Binding var invalidNumberAlert: Bool
+    
+    var body: some View {
+        Button("Get Verification Code") {
+            numberIsFocused = false
+            do {
+                let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                let formattedPhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
+            } catch {
+                invalidNumberAlert = true
+            }
+        }
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.all)
+            .background(buttonBackgroundColor)
+            .cornerRadius(roundedCornerRadius)
+            .alert(invalidPhoneNumberPrompt, isPresented: $invalidNumberAlert) {
+                Button("OK") { }
+            }
     }
 }
 
