@@ -24,11 +24,13 @@ struct ContentView: View {
             Text("PiggyBank")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             Spacer()
                 .frame(height: 30)
             Text("Enter your mobile phone number")
                 .font(.title2)
                 .fontWeight(.medium)
+                .foregroundColor(.black)
             Spacer()
                 .frame(height: 20)
             HStack {
