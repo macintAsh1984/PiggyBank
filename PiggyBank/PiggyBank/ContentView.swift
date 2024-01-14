@@ -38,22 +38,7 @@ struct ContentView: View {
             Spacer()
                 .frame(height: 20)
             HStack {
-                Picker("Country Code", selection: $countryCode) {
-                    Text(countryCodes[0])
-                }
-                .frame(height: 22)
-                .padding(.vertical)
-                .background(.white)
-                .cornerRadius(roundedCornerRadius)
-                TextField("(555)-369-1984", text: $phoneNumber)
-                    .focused($numberIsFocused)
-                    .keyboardType(.numberPad)
-                    .padding(.all)
-                    .background(.white)
-                    .cornerRadius(roundedCornerRadius)
-                    .onChange(of: phoneNumber) {
-                        phoneNumber = PartialFormatter().formatPartial(phoneNumber)
-                    }
+                PhoneNumberEntryView(countryCode: $countryCode, phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused)
             }
             Spacer()
                 .frame(height: 30)
@@ -66,6 +51,34 @@ struct ContentView: View {
         .onTapGesture {
             numberIsFocused = false
         }
+    }
+}
+
+struct PhoneNumberEntryView: View {
+    @Binding var countryCode: String
+    @Binding var phoneNumber: String
+    @FocusState.Binding var numberIsFocused: Bool
+    
+    let phoneNumberplaceholder = "(555)-369-1984"
+    
+    var body: some View {
+        Picker("Country Code", selection: $countryCode) {
+            Text(countryCodes[0])
+        }
+        .frame(height: 22)
+        .padding(.vertical)
+        .background(.white)
+        .cornerRadius(roundedCornerRadius)
+        TextField(phoneNumberplaceholder, text: $phoneNumber)
+            .focused($numberIsFocused)
+            .keyboardType(.numberPad)
+            .padding(.all)
+            .background(.white)
+            .cornerRadius(roundedCornerRadius)
+            .onChange(of: phoneNumber) {
+                phoneNumber = PartialFormatter().formatPartial(phoneNumber)
+            }
+
     }
 }
 
