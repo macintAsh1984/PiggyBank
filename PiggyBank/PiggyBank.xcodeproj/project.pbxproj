@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB109CBA2B533ABA00634389 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = AB109CB92B533ABA00634389 /* PhoneNumberKit */; };
 		ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */; };
 		ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */; };
 		ABA0A5062B51DC3200A8B7BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB109CBA2B533ABA00634389 /* PhoneNumberKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			);
 			name = PiggyBank;
 			packageProductDependencies = (
+				AB109CB92B533ABA00634389 /* PhoneNumberKit */,
 			);
 			productName = PiggyBank;
 			productReference = ABA0A4FE2B51DC2F00A8B7BA /* PiggyBank.app */;
@@ -114,6 +117,7 @@
 			);
 			mainGroup = ABA0A4F52B51DC2F00A8B7BA;
 			packageReferences = (
+				AB109CB82B533ABA00634389 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 			);
 			productRefGroup = ABA0A4FF2B51DC2F00A8B7BA /* Products */;
 			projectDirPath = "";
@@ -348,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AB109CB82B533ABA00634389 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/PhoneNumberKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AB109CB92B533ABA00634389 /* PhoneNumberKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB109CB82B533ABA00634389 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
+			productName = PhoneNumberKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ABA0A4F62B51DC2F00A8B7BA /* Project object */;
 }

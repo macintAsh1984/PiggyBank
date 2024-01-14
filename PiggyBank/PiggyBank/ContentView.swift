@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import PhoneNumberKit
+
+let phoneNumberKit = PhoneNumberKit()
 
 struct ContentView: View {
-    @State var name: String = ""
+    @State var phoneNumber: String = ""
     @State var countryCode: String = ""
+    @State var invalidNumberAlert = false
     @FocusState var numberIsFocused: Bool
+    
     let countryCodes = ["🇺🇸 US +1"]
     
     var body: some View {
@@ -21,7 +26,7 @@ struct ContentView: View {
                 .fontWeight(.bold)
             Spacer()
                 .frame(height: 30)
-            Text("Enter your mobile number")
+            Text("Enter your mobile phone number")
                 .font(.title2)
                 .fontWeight(.medium)
             Spacer()
@@ -34,17 +39,26 @@ struct ContentView: View {
                 .padding(.vertical)
                 .background(.white)
                 .cornerRadius(10.0)
-                TextField("(555)-369-1984", text: $name)
+                TextField("(555)-369-1984", text: $phoneNumber)
                     .focused($numberIsFocused)
                     .keyboardType(.numberPad)
                     .padding(.all)
                     .background(.white)
                     .cornerRadius(10.0)
+                    .onChange(of: phoneNumber) {
+                        phoneNumber = PartialFormatter().formatPartial(phoneNumber)
+                    }
             }
             Spacer()
                 .frame(height: 30)
             Button {
                 numberIsFocused = false
+                do {
+                    let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                    let formattedPhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
+                } catch {
+                    invalidNumberAlert = true
+                }
             } label: {
                 Text("Get Verification Code")
                     .fontWeight(.semibold)
@@ -53,6 +67,10 @@ struct ContentView: View {
                 .padding(.all)
                 .background(Color(hue: 331.0, saturation: 0.38, brightness: 0.94))
                 .cornerRadius(10.0)
+                .alert("Invalid Phone Number", isPresented: $invalidNumberAlert) {
+                    Button("OK") { }
+                }
+
             Spacer()
         }
         .padding()
