@@ -18,7 +18,7 @@ let invalidPhoneNumberPrompt = "Invalid Phone Number"
 
 struct ContentView: View {
     @State var phoneNumber: String = ""
-    @State var countryCode: String = ""
+    @State var countryCodeCount: Int = 0
     @State var invalidNumberAlert = false
     @FocusState var numberIsFocused: Bool
     
@@ -38,7 +38,7 @@ struct ContentView: View {
             Spacer()
                 .frame(height: 20)
             HStack {
-                PhoneNumberEntryView(countryCode: $countryCode, phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused)
+                PhoneNumberEntryView(countryCodeCount: $countryCodeCount, phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused)
             }
             Spacer()
                 .frame(height: 30)
@@ -55,15 +55,17 @@ struct ContentView: View {
 }
 
 struct PhoneNumberEntryView: View {
-    @Binding var countryCode: String
+    @Binding var countryCodeCount: Int
     @Binding var phoneNumber: String
     @FocusState.Binding var numberIsFocused: Bool
     
     let phoneNumberplaceholder = "(555)-369-1984"
     
     var body: some View {
-        Picker("Country Code", selection: $countryCode) {
-            Text(countryCodes[0])
+        Picker("Country Code", selection: $countryCodeCount) {
+            ForEach(0..<1) { _ in
+                Text(countryCodes[countryCodeCount])
+            }
         }
         .frame(height: 22)
         .padding(.vertical)
