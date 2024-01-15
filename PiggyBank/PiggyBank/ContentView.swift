@@ -48,6 +48,7 @@ struct ContentView: View {
         .padding()
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
         .background(appBackgroundColor)
+        .preferredColorScheme(.light)
         .onTapGesture {
             numberIsFocused = false
         }
