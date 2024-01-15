@@ -12,6 +12,9 @@
 		ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */; };
 		ABA0A5062B51DC3200A8B7BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */; };
 		ABA0A5092B51DC3200A8B7BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA0A5082B51DC3200A8B7BA /* Preview Assets.xcassets */; };
+		ABD9467D2B5534FD0087A507 /* CandyBeans.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467A2B5534FD0087A507 /* CandyBeans.otf */; };
+		ABD9467E2B5534FD0087A507 /* Get Commercial License.url in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467B2B5534FD0087A507 /* Get Commercial License.url */; };
+		ABD9467F2B5534FD0087A507 /* FSLA_NonCommercial_License.html in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +23,10 @@
 		ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ABA0A5082B51DC3200A8B7BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		ABD9467A2B5534FD0087A507 /* CandyBeans.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CandyBeans.otf; sourceTree = "<group>"; };
+		ABD9467B2B5534FD0087A507 /* Get Commercial License.url */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Get Commercial License.url"; sourceTree = "<group>"; };
+		ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FSLA_NonCommercial_License.html; sourceTree = "<group>"; };
+		ABD946802B55374D0087A507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +60,10 @@
 		ABA0A5002B51DC2F00A8B7BA /* PiggyBank */ = {
 			isa = PBXGroup;
 			children = (
+				ABD946802B55374D0087A507 /* Info.plist */,
 				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */,
+				ABD946792B5534FD0087A507 /* candy_beans */,
 				ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */,
 				ABA0A5072B51DC3200A8B7BA /* Preview Content */,
 			);
@@ -67,6 +76,16 @@
 				ABA0A5082B51DC3200A8B7BA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		ABD946792B5534FD0087A507 /* candy_beans */ = {
+			isa = PBXGroup;
+			children = (
+				ABD9467A2B5534FD0087A507 /* CandyBeans.otf */,
+				ABD9467B2B5534FD0087A507 /* Get Commercial License.url */,
+				ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */,
+			);
+			path = candy_beans;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,7 +152,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABD9467D2B5534FD0087A507 /* CandyBeans.otf in Resources */,
 				ABA0A5092B51DC3200A8B7BA /* Preview Assets.xcassets in Resources */,
+				ABD9467E2B5534FD0087A507 /* Get Commercial License.url in Resources */,
+				ABD9467F2B5534FD0087A507 /* FSLA_NonCommercial_License.html in Resources */,
 				ABA0A5062B51DC3200A8B7BA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,12 +305,13 @@
 				DEVELOPMENT_TEAM = LK4997QHS7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PiggyBank/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -313,6 +336,7 @@
 				DEVELOPMENT_TEAM = LK4997QHS7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PiggyBank/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

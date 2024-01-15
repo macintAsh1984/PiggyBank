@@ -26,13 +26,13 @@ struct ContentView: View {
         VStack(spacing: 0) {
             Image("PiggyBank Icon")
             Text("PiggyBank")
-                .font(.largeTitle)
+                .font(.custom("CandyBeans", size: 50.0, relativeTo: .title))
                 .fontWeight(.bold)
                 .foregroundColor(.black)
             Spacer()
-                .frame(height: 30)
+                .frame(height: 20)
             Text("Enter your mobile phone number")
-                .font(.title2)
+                .font(.custom("CandyBeans", size: 22.0, relativeTo: .title2))
                 .fontWeight(.medium)
                 .foregroundColor(.black)
             Spacer()
@@ -100,6 +100,7 @@ struct VerificationButtonView: View {
                 invalidNumberAlert = true
             }
         }
+            .font(.custom("CandyBeans", size: 18.0))
             .fontWeight(.semibold)
             .foregroundColor(.white)
             .padding(.all)
