@@ -9,12 +9,13 @@ import SwiftUI
 import PhoneNumberKit
 
 let phoneNumberKit = PhoneNumberKit()
+
 let appBackgroundColor = "Light Pink"
 let buttonBackgroundColor = "Dark Pink"
+let appFont = "CandyBeans"
 let roundedCornerRadius = 10.0
 
 let countryCodes = ["🇺🇸 US +1"]
-let invalidPhoneNumberPrompt = "Invalid Phone Number"
 
 struct ContentView: View {
     @State var phoneNumber: String = ""
@@ -26,13 +27,13 @@ struct ContentView: View {
         VStack(spacing: 0) {
             Image("PiggyBank Icon")
             Text("PiggyBank")
-                .font(.custom("CandyBeans", size: 50.0, relativeTo: .title))
+                .font(.custom(appFont, size: 50.0, relativeTo: .title))
                 .fontWeight(.bold)
                 .foregroundColor(.black)
             Spacer()
                 .frame(height: 20)
             Text("Enter your mobile phone number")
-                .font(.custom("CandyBeans", size: 22.0, relativeTo: .title2))
+                .font(.custom(appFont, size: 22.0, relativeTo: .title2))
                 .fontWeight(.medium)
                 .foregroundColor(.black)
             Spacer()
@@ -90,6 +91,8 @@ struct VerificationButtonView: View {
     @FocusState.Binding var numberIsFocused: Bool
     @Binding var invalidNumberAlert: Bool
     
+    let invalidPhoneNumberPrompt = "Invalid Phone Number"
+    
     var body: some View {
         Button("Get Verification Code") {
             numberIsFocused = false
@@ -100,7 +103,7 @@ struct VerificationButtonView: View {
                 invalidNumberAlert = true
             }
         }
-            .font(.custom("CandyBeans", size: 18.0))
+            .font(.custom(appFont, size: 18.0))
             .fontWeight(.semibold)
             .foregroundColor(.white)
             .padding(.all)

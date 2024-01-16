@@ -66,7 +66,7 @@
 				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */,
 				AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */,
-				ABD946792B5534FD0087A507 /* candy_beans */,
+				ABD946792B5534FD0087A507 /* Fonts */,
 				ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */,
 				ABA0A5072B51DC3200A8B7BA /* Preview Content */,
 			);
@@ -81,14 +81,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		ABD946792B5534FD0087A507 /* candy_beans */ = {
+		ABD946792B5534FD0087A507 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				ABD9467A2B5534FD0087A507 /* CandyBeans.otf */,
 				ABD9467B2B5534FD0087A507 /* Get Commercial License.url */,
 				ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */,
 			);
-			path = candy_beans;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

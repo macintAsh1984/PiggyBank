@@ -18,7 +18,7 @@ struct SplashScreen: View {
                 VStack {
                     Image("PiggyBank Icon")
                     Text("PiggyBank")
-                        .font(.custom("CandyBeans", size: 50.0, relativeTo: .title))
+                        .font(.custom(appFont, size: 50.0, relativeTo: .title))
                         .fontWeight(.bold)
                         .foregroundColor(.black)
                 }
