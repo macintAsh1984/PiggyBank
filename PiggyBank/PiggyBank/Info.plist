@@ -6,5 +6,7 @@
 	<array>
 		<string>CandyBeans.otf</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict/>
 </dict>
 </plist>

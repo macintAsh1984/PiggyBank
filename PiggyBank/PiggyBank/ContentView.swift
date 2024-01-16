@@ -9,8 +9,8 @@ import SwiftUI
 import PhoneNumberKit
 
 let phoneNumberKit = PhoneNumberKit()
-let appBackgroundColor = Color(hue: 324.0, saturation: 0.15, brightness: 0.97)
-let buttonBackgroundColor = Color(hue: 331.0, saturation: 0.38, brightness: 0.94)
+let appBackgroundColor = "Light Pink"
+let buttonBackgroundColor = "Dark Pink"
 let roundedCornerRadius = 10.0
 
 let countryCodes = ["🇺🇸 US +1"]
@@ -47,7 +47,7 @@ struct ContentView: View {
         }
         .padding()
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
-        .background(appBackgroundColor)
+        .background(Color(appBackgroundColor))
         .preferredColorScheme(.light)
         .onTapGesture {
             numberIsFocused = false
@@ -104,7 +104,7 @@ struct VerificationButtonView: View {
             .fontWeight(.semibold)
             .foregroundColor(.white)
             .padding(.all)
-            .background(buttonBackgroundColor)
+            .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
             .alert(invalidPhoneNumberPrompt, isPresented: $invalidNumberAlert) {
                 Button("OK") { }
