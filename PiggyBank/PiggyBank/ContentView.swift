@@ -10,6 +10,7 @@ import PhoneNumberKit
 
 let phoneNumberKit = PhoneNumberKit()
 
+// Fonts and Color names
 let appBackgroundColor = "Light Pink"
 let buttonBackgroundColor = "Dark Pink"
 let appFont = "CandyBeans"
@@ -47,9 +48,14 @@ struct ContentView: View {
             Spacer()
         }
         .padding()
+        //Cover the entire background with the custom color appBackgroundColor
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
         .background(Color(appBackgroundColor))
+        
+        //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
         .preferredColorScheme(.light)
+        
+        //When the user taps outside the textfield, the numberkey pad is dismissed.
         .onTapGesture {
             numberIsFocused = false
         }
@@ -64,6 +70,7 @@ struct PhoneNumberEntryView: View {
     let phoneNumberplaceholder = "(555)-369-1984"
     
     var body: some View {
+        //Displays a drop down menu for country codes with the US country code being the default option.
         Picker("Country Code", selection: $countryCodeCount) {
             ForEach(0..<1) { _ in
                 Text(countryCodes[countryCodeCount])
@@ -73,12 +80,14 @@ struct PhoneNumberEntryView: View {
         .padding(.vertical)
         .background(.white)
         .cornerRadius(roundedCornerRadius)
+        //When the textfield is selected, a numeric keypad appears.
         TextField(phoneNumberplaceholder, text: $phoneNumber)
             .focused($numberIsFocused)
             .keyboardType(.numberPad)
             .padding(.all)
             .background(.white)
             .cornerRadius(roundedCornerRadius)
+        //Formats the phone number a user types in as (###)-###-####.
             .onChange(of: phoneNumber) {
                 phoneNumber = PartialFormatter().formatPartial(phoneNumber)
             }
@@ -95,6 +104,7 @@ struct VerificationButtonView: View {
     
     var body: some View {
         Button("Get Verification Code") {
+            //When the user taps the "Get Verification Code" button, the numberkey pad is dismissed. If the phone number entered is not the correct format or has more than 10 digits, an alert prompt will appear.
             numberIsFocused = false
             do {
                 let parsedNumber = try phoneNumberKit.parse(phoneNumber)
@@ -109,6 +119,7 @@ struct VerificationButtonView: View {
             .padding(.all)
             .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
+        // The alert prompt "Invalid Phone Number" appear when users type their phone numbers incorrectly."
             .alert(invalidPhoneNumberPrompt, isPresented: $invalidNumberAlert) {
                 Button("OK") { }
             }

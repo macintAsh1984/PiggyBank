@@ -11,6 +11,7 @@ struct SplashScreen: View {
     @State var splashScreenIsActive = false
     
     var body: some View {
+        //To prevent the splash screen from being stuck on the screen, show the main app view when the toggle, splashScreenIsActive is true.
         if splashScreenIsActive {
             ContentView()
         } else {
@@ -27,6 +28,7 @@ struct SplashScreen: View {
             .background(Color(appBackgroundColor))
             .preferredColorScheme(.light)
             .onAppear {
+                //The splashscreen will stay onscreen for 2 seconds.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     withAnimation {
                         self.splashScreenIsActive = true
