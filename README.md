@@ -40,7 +40,7 @@ When users mistype their phone, whether they enter accidentally hit **Get Verifi
 
 PiggyBank's splashscreen was created as a separate SwiftUI view called `SplashScreenView`. To prevent the splashscreen from staying onscreen for a long period of time, a toggle called `splashScreenIsActive` and a `DispatchQueue` were used to display the splashscreen for 2 seconds. After 2 seconds, the login page is displayed. A code snippet of the splash screen transition is down below:
 
-```
+```swift
             .onAppear {
                 //The splashscreen will stay onscreen for 2 seconds.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -57,7 +57,7 @@ The number keypad dismissal operates on a `@FocusState` toggle `numberIsFocused`
 
 PiggyBank's "As You Type" phone number formatting was implemented through the use of the `.onChange` modifier and the **PhoneNumberKit** Swift framework. PhoneNumberKit's PartialFormatter can automatically format phone numbers. The following code snippet reassigns the `phoneNumber` variable the formatted phone number as the user types it in:
 
-``` 
+```swift 
      //Formats the phone number a user types in as (###)-###-####.
             .onChange(of: phoneNumber) {
                 phoneNumber = PartialFormatter().formatPartial(phoneNumber)
