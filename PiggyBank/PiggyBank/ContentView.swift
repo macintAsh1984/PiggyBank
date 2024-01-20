@@ -108,7 +108,6 @@ struct VerificationButtonView: View {
             numberIsFocused = false
             do {
                 let parsedNumber = try phoneNumberKit.parse(phoneNumber)
-                let formattedPhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
             } catch {
                 invalidNumberAlert = true
             }
