@@ -63,3 +63,14 @@ PiggyBank's "As You Type" phone number formatting was implemented through the us
                 phoneNumber = PartialFormatter().formatPartial(phoneNumber)
             }
 ```
+The Invalid Phone Number alert was created using an `.alert` modifier and a toggle called `invalidNumberAlert`. To display the alert, PhoneNumberKit's parser attempts to parse the phone number the user entered (as shown in the code snippet below). If the parsing fails, that triggers the `invalidNumberAlert` to be true and display the alert.
+
+```swift
+            do {
+                let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                let formattedPhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
+            } catch {
+                invalidNumberAlert = true
+            }
+```
+
