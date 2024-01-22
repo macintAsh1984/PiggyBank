@@ -22,45 +22,50 @@ struct ContentView: View {
     @State var phoneNumber: String = ""
     @State var countryCodeCount: Int = 0
     @State var invalidNumberAlert = false
+    @State var showVerificationView = false
     @FocusState var numberIsFocused: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            Image("PiggyBank Icon")
-            Text("PiggyBank")
-                .font(.custom(appFont, size: 50.0, relativeTo: .title))
-                .fontWeight(.bold)
-                .foregroundColor(.black)
-            Spacer()
-                .frame(height: 20)
-            Text("Enter your mobile phone number")
-                .font(.custom(appFont, size: 22.0, relativeTo: .title2))
-                .fontWeight(.medium)
-                .foregroundColor(.black)
-            Spacer()
-                .frame(height: 20)
-            HStack {
-                PhoneNumberEntryView(countryCodeCount: $countryCodeCount, phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused)
+        NavigationStack {
+            VStack(spacing: 0) {
+                Image("PiggyBank Icon")
+                Text("PiggyBank")
+                    .font(.custom(appFont, size: 50.0, relativeTo: .title))
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+                Spacer()
+                    .frame(height: 20)
+                Text("Enter your mobile phone number")
+                    .font(.custom(appFont, size: 22.0, relativeTo: .title2))
+                    .fontWeight(.medium)
+                    .foregroundColor(.black)
+                Spacer()
+                    .frame(height: 20)
+                HStack {
+                    PhoneNumberEntryView(countryCodeCount: $countryCodeCount, phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused)
+                }
+                Spacer()
+                    .frame(height: 30)
+                VerificationButtonView(phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused, invalidNumberAlert: $invalidNumberAlert, showVerificationView: $showVerificationView)
+                Spacer()
             }
-            Spacer()
-                .frame(height: 30)
-            VerificationButtonView(phoneNumber: $phoneNumber, numberIsFocused: $numberIsFocused, invalidNumberAlert: $invalidNumberAlert)
-            Spacer()
-        }
-        .padding()
+            .padding()
         //Cover the entire background with the custom color appBackgroundColor
-        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
-        .background(Color(appBackgroundColor))
+            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
+            .background(Color(appBackgroundColor))
         
         //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
-        .preferredColorScheme(.light)
+            .preferredColorScheme(.light)
         
         //When the user taps outside the textfield, the numberkey pad is dismissed.
-        .onTapGesture {
-            numberIsFocused = false
+            .onTapGesture {
+                numberIsFocused = false
+            }
         }
+        
+       }
     }
-}
+
 
 struct PhoneNumberEntryView: View {
     @Binding var countryCodeCount: Int
@@ -99,6 +104,7 @@ struct VerificationButtonView: View {
     @Binding var phoneNumber: String
     @FocusState.Binding var numberIsFocused: Bool
     @Binding var invalidNumberAlert: Bool
+    @Binding var showVerificationView: Bool
     
     let invalidPhoneNumberPrompt = "Invalid Phone Number"
     
@@ -108,6 +114,7 @@ struct VerificationButtonView: View {
             numberIsFocused = false
             do {
                 let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                showVerificationView = true
             } catch {
                 invalidNumberAlert = true
             }
@@ -118,10 +125,16 @@ struct VerificationButtonView: View {
             .padding(.all)
             .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
+            .navigationDestination(isPresented: $showVerificationView) {
+                VerificationView()
+            }
         // The alert prompt "Invalid Phone Number" appear when users type their phone numbers incorrectly."
             .alert(invalidPhoneNumberPrompt, isPresented: $invalidNumberAlert) {
                 Button("OK") { }
             }
+            .padding()
+        
+
     }
 }
 
