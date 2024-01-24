@@ -17,6 +17,7 @@
 		ABD9467D2B5534FD0087A507 /* CandyBeans.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467A2B5534FD0087A507 /* CandyBeans.otf */; };
 		ABD9467E2B5534FD0087A507 /* Get Commercial License.url in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467B2B5534FD0087A507 /* Get Commercial License.url */; };
 		ABD9467F2B5534FD0087A507 /* FSLA_NonCommercial_License.html in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */; };
+		ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF4E4362B60BC8700A7D5FD /* Api.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		ABD9467B2B5534FD0087A507 /* Get Commercial License.url */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Get Commercial License.url"; sourceTree = "<group>"; };
 		ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FSLA_NonCommercial_License.html; sourceTree = "<group>"; };
 		ABD946802B55374D0087A507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		ABF4E4362B60BC8700A7D5FD /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				ABD946802B55374D0087A507 /* Info.plist */,
 				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */,
+				ABF4E4362B60BC8700A7D5FD /* Api.swift */,
 				AB6CA9802B5D034600C445F6 /* VerificationView.swift */,
 				AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */,
 				ABD946792B5534FD0087A507 /* Fonts */,
@@ -176,6 +179,7 @@
 				AB3435ED2B56F3EE001D4B4A /* SplashScreen.swift in Sources */,
 				ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */,
 				ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */,
+				ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */,
 				AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
