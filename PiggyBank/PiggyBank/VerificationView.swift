@@ -45,29 +45,34 @@ struct VerificationView: View {
                                 isFocusedOnField = (isFocusedOnField ?? 0) - 1
                             }
                             
-                                if enteredDigits[index].count > 1 {
-                                    if enteredDigits[index].prefix(1) == oldValue {
-                                        enteredDigits[index] = String(enteredDigits[index].dropFirst())
-                                    } else {
-                                        enteredDigits[index] = String(enteredDigits[index].dropLast())
-                                    }
+                            if enteredDigits[index].count > 1 {
+                                if enteredDigits[index].prefix(1) == oldValue {
+                                    enteredDigits[index] = String(enteredDigits[index].dropFirst())
+                                } else {
+                                    enteredDigits[index] = String(enteredDigits[index].dropLast())
                                 }
-                            //isFocusedOnField = (isFocusedOnField ?? 0) + 1
+                            }
                         }
-
+                    
                 }
             }
             Spacer()
                 .frame(height: 20)
             Button("Resend Verification Code") {
-                //Resending new code logic here
+                Task {
+                    do {
+                        let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
+                    } catch let apiError as ApiError {
+                        let _ = apiError.message
+                    }
+                }
             }
-                .font(.custom(appFont, size: 18.0))
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .padding(.all)
-                .background(Color(buttonBackgroundColor))
-                .cornerRadius(roundedCornerRadius)
+            .font(.custom(appFont, size: 18.0))
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.all)
+            .background(Color(buttonBackgroundColor))
+            .cornerRadius(roundedCornerRadius)
         }
         .padding()
         //Cover the entire background with the custom color appBackgroundColor

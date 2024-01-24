@@ -17,6 +17,7 @@ let appFont = "CandyBeans"
 let roundedCornerRadius = 10.0
 
 let countryCodes = ["🇺🇸 US +1"]
+var e164PhoneNumber: String = ""
 
 struct ContentView: View {
     @State var phoneNumber: String = ""
@@ -112,11 +113,16 @@ struct VerificationButtonView: View {
         Button("Get Verification Code") {
             //When the user taps the "Get Verification Code" button, the numberkey pad is dismissed. If the phone number entered is not the correct format or has more than 10 digits, an alert prompt will appear.
             numberIsFocused = false
-            do {
-                let parsedNumber = try phoneNumberKit.parse(phoneNumber)
-                showVerificationView = true
-            } catch {
-                invalidNumberAlert = true
+            Task {
+                do {
+                    let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                    e164PhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
+                    let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
+                    showVerificationView = true
+                } catch let apiError as ApiError {
+                    invalidNumberAlert = true
+                    let _ = apiError.message
+                }
             }
         }
             .font(.custom(appFont, size: 18.0))
