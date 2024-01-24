@@ -10,7 +10,6 @@ import SwiftUI
 struct VerificationView: View {
     @State var enteredDigits = [String](repeating: "", count: 6)
     @FocusState var isFocusedOnField: Int?
-    @FocusState var focusedOnTextfield: Bool
     
     var body: some View {
         VStack {
@@ -32,21 +31,28 @@ struct VerificationView: View {
                 ForEach(0..<6, id: \.self) { index in
                     TextField("", text: $enteredDigits[index])
                         .keyboardType(.numberPad)
-                        .focused($focusedOnTextfield)
+                        .textContentType(.oneTimeCode)
                         .padding(.all)
                         .background(.white)
                         .cornerRadius(roundedCornerRadius)
                         .focused($isFocusedOnField, equals: index)
                         .tag(index)
                         .onChange(of: enteredDigits[index]) { oldValue, newValue in
-                            if enteredDigits[index].count > 1 {
-                                if enteredDigits[index].prefix(1) == oldValue {
-                                    enteredDigits[index] = String(enteredDigits[index].dropFirst())
-                                } else {
-                                    enteredDigits[index] = String(enteredDigits[index].dropLast())
-                                }
+                            if !newValue.isEmpty {
+                                isFocusedOnField = (isFocusedOnField ?? 0) + 1
+                                
+                            } else {
+                                isFocusedOnField = (isFocusedOnField ?? 0) - 1
                             }
-                            isFocusedOnField = (isFocusedOnField ?? 0) + 1
+                            
+                                if enteredDigits[index].count > 1 {
+                                    if enteredDigits[index].prefix(1) == oldValue {
+                                        enteredDigits[index] = String(enteredDigits[index].dropFirst())
+                                    } else {
+                                        enteredDigits[index] = String(enteredDigits[index].dropLast())
+                                    }
+                                }
+                            //isFocusedOnField = (isFocusedOnField ?? 0) + 1
                         }
 
                 }
@@ -69,9 +75,6 @@ struct VerificationView: View {
         .background(Color(appBackgroundColor))
         //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
         .preferredColorScheme(.light)
-        .onTapGesture {
-            focusedOnTextfield = false
-        }
     }
 }
 
