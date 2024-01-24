@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AB109CBA2B533ABA00634389 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = AB109CB92B533ABA00634389 /* PhoneNumberKit */; };
 		AB3435ED2B56F3EE001D4B4A /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */; };
+		AB48CECA2B60E7D400FA6702 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB48CEC92B60E7D400FA6702 /* HomePageView.swift */; };
 		AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6CA9802B5D034600C445F6 /* VerificationView.swift */; };
 		ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */; };
 		ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		AB48CEC92B60E7D400FA6702 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		AB6CA9802B5D034600C445F6 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		ABA0A4FE2B51DC2F00A8B7BA /* PiggyBank.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PiggyBank.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiggyBankApp.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */,
 				ABF4E4362B60BC8700A7D5FD /* Api.swift */,
+				AB48CEC92B60E7D400FA6702 /* HomePageView.swift */,
 				AB6CA9802B5D034600C445F6 /* VerificationView.swift */,
 				AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */,
 				ABD946792B5534FD0087A507 /* Fonts */,
@@ -180,6 +183,7 @@
 				ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */,
 				ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */,
 				ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */,
+				AB48CECA2B60E7D400FA6702 /* HomePageView.swift in Sources */,
 				AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

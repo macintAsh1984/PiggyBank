@@ -119,9 +119,8 @@ struct VerificationButtonView: View {
                     e164PhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
                     let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
                     showVerificationView = true
-                } catch let apiError as ApiError {
+                } catch  {
                     invalidNumberAlert = true
-                    let _ = apiError.message
                 }
             }
         }

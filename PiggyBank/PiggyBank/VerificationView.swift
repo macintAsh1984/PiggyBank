@@ -10,6 +10,9 @@ import SwiftUI
 struct VerificationView: View {
     @State var enteredDigits = [String](repeating: "", count: 6)
     @FocusState var isFocusedOnField: Int?
+    @State var showHomeView = false
+    @State var invalidCodeAlert = false
+    
     
     var body: some View {
         VStack {
@@ -32,6 +35,7 @@ struct VerificationView: View {
                     TextField("", text: $enteredDigits[index])
                         .keyboardType(.numberPad)
                         .textContentType(.oneTimeCode)
+                        .multilineTextAlignment(.center)
                         .padding(.all)
                         .background(.white)
                         .cornerRadius(roundedCornerRadius)
@@ -52,9 +56,27 @@ struct VerificationView: View {
                                     enteredDigits[index] = String(enteredDigits[index].dropLast())
                                 }
                             }
+                            let code = enteredDigits.joined()
+                            if code.count == 6 {
+                                isFocusedOnField = nil
+                                Task {
+                                    do {
+                                        let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
+                                        showHomeView = true
+                                    } catch  {
+                                        invalidCodeAlert = true
+                                    }
+                                }
+
+                            }
                         }
-                    
                 }
+            }
+            .navigationDestination(isPresented: $showHomeView) {
+                HomePageView()
+            }
+            .alert("Invalid Code", isPresented: $invalidCodeAlert) {
+                Button("OK") { }
             }
             Spacer()
                 .frame(height: 20)
