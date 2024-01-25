@@ -12,10 +12,18 @@ struct VerificationView: View {
     @FocusState var isFocusedOnField: Int?
     @State var showHomeView = false
     @State var invalidCodeAlert = false
+    @State var isLoading = false
     
     
     var body: some View {
         VStack {
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .controlSize(.large)
+            }
+            Spacer()
+                .frame(height: 20)
             Text("Verify Your Code")
                 .font(.custom(appFont, size: 40.0, relativeTo: .title))
                 .fontWeight(.bold)
@@ -59,12 +67,16 @@ struct VerificationView: View {
                             let code = enteredDigits.joined()
                             if code.count == 6 {
                                 isFocusedOnField = nil
+                                isLoading = true
                                 Task {
                                     do {
                                         let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
                                         showHomeView = true
+                                        isLoading = false
                                     } catch  {
                                         invalidCodeAlert = true
+                                        isLoading = false
+                                        enteredDigits = [String](repeating: "", count: 6)
                                     }
                                 }
 
