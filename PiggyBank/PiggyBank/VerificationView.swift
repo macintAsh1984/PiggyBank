@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VerificationView: View {
-    @State var enteredDigits = [String](repeating: "", count: 6)
+    @State var enteredDigits = [String](repeating: "\u{200B}", count: 6)
     @FocusState var isFocusedOnField: Int?
     @State var showHomeView = false
     @State var invalidCodeAlert = false
@@ -49,23 +49,18 @@ struct VerificationView: View {
                         .cornerRadius(roundedCornerRadius)
                         .focused($isFocusedOnField, equals: index)
                         .tag(index)
-                        .onChange(of: enteredDigits[index]) { oldValue, newValue in
-                            if !newValue.isEmpty {
+                        .onChange(of: enteredDigits[index]) {
+                            if enteredDigits[index].count == 2 && index < 5 {
                                 isFocusedOnField = (isFocusedOnField ?? 0) + 1
                                 
-                            } else {
+                            } else if enteredDigits[index].count == 0 && index > 0 {
+                                enteredDigits[index] = "\u{200B}"
                                 isFocusedOnField = (isFocusedOnField ?? 0) - 1
                             }
                             
-                            if enteredDigits[index].count > 1 {
-                                if enteredDigits[index].prefix(1) == oldValue {
-                                    enteredDigits[index] = String(enteredDigits[index].dropFirst())
-                                } else {
-                                    enteredDigits[index] = String(enteredDigits[index].dropLast())
-                                }
-                            }
-                            let code = enteredDigits.joined()
-                            if code.count == 6 {
+                            if index == 5 && enteredDigits[index].count == 2 {
+                                let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
+                                print(code)
                                 isFocusedOnField = nil
                                 isLoading = true
                                 Task {
@@ -76,12 +71,11 @@ struct VerificationView: View {
                                     } catch  {
                                         invalidCodeAlert = true
                                         isLoading = false
-                                        enteredDigits = [String](repeating: "", count: 6)
+                                        enteredDigits = [String](repeating: "\u{200B}", count: 6)
                                     }
                                 }
-
                             }
-                        }
+                    }
                 }
             }
             .navigationDestination(isPresented: $showHomeView) {

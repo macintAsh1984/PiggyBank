@@ -12,7 +12,7 @@ struct HomePageView: View {
         VStack {
             Image("PiggyBank Icon")
             Text("Every Cent Counts!")
-                .font(.custom(appFont, size: 45.0, relativeTo: .title))
+                .font(.custom(appFont, size: 40.0, relativeTo: .title))
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.black)
