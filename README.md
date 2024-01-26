@@ -41,7 +41,7 @@ When users mistype their phone, whether they enter accidentally hit **Get Verifi
 ### Phone Verification via OTP
 When users enter a valid phone number, they are taken to a verification screen that prompts them to enter a six-digit One Time Passcode (OTP) in an OTP-style textfield. If the code is entered in correctly, they are taken to PiggyBank's home screen.
 
-#### Resending The Verification Code
+### Resending The Verification Code
 If the user forgets the code that was sent to them or would like a new verification code, hitting the **Resend Verification Code** button on the verification screen will send them a new OTP.
 
 ### Invalid OTP Verification Code Alert
