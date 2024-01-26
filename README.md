@@ -15,6 +15,8 @@ PiggyBank contains a login page with the following features
 - Number Keypad Dismissal
 - Phone Number Formatting
 - Invalid Phone Number Alert
+- Phone Verification via OTP
+- Invalid OTP Verification Code Alert
 
 ### Country Code Selection
 PiggyBank's login screen displays a dropdown menu listing country codes that users can select from.
@@ -35,6 +37,15 @@ PiggyBank's login page also formats user's phone numbers as they type it into th
 When users mistype their phone, whether they enter accidentally hit **Get Verification Code** button by mistake or enter too many or too little digits, they are presented with an alert that have entered an invalid phone number.
 
 <img src="https://github.com/macintAsh1984/PiggyBank/assets/84110959/d12d706c-89bb-4097-a1ae-dc54f9a8698d" width="322.5" height="699" />
+
+### Phone Verification via OTP
+When users enter a valid phone number, they are taken to a verification screen that prompts them to enter a six-digit One Time Passcode (OTP) in an OTP-style textfield. If the code is entered in correctly, they are taken to PiggyBank's home screen.
+
+#### Resending The Verification Code
+If the user forgets the code that was sent to them or would like a new verification code, hitting the **Resend Verification Code** button on the verification screen will send them a new OTP.
+
+### Invalid OTP Verification Code Alert
+When users mistype their code, they are presented with an alert that have entered an invalid code, erases the invalid code, and allows them to re-enter the code.
 
 ## Feature Implementations
 
@@ -73,3 +84,45 @@ The Invalid Phone Number alert was created using an `.alert` modifier and a togg
             }
 ```
 
+Sending the verification code to the entered phone number is done by an API that contains a built-in method for verification called `sendVerificationToken()`. When the user clicks the **Get Verification Code** button, a `Task` is invoked that uses async/await to determine if `sendVerificationToken()` was successful at verifying the phone number (as shown in the code snippet below). 
+
+**Note**: The phone number must be stored in an E164 format for `sendVerificationToken()` to operate.
+
+```swift
+            Task {
+                do {
+                    let parsedNumber = try phoneNumberKit.parse(phoneNumber)
+                    e164PhoneNumber = phoneNumberKit.format(parsedNumber, toType: .e164)
+                    let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
+                    showVerificationView = true
+                } catch  {
+                    invalidNumberAlert = true
+                }
+            }
+        }
+```
+
+The navigation for PiggyBank's different screens is done using SwiftUI's `NavigationStack` and `.navigationDestination` modifier that navigates to the appropriate screen based on a toggle of whether to display the new screen. This also allows user to navigate back to the Login screen from the Verifications creen if they entered a wrong phone number. The code snippet below shows an example of how PiggyBank navigates from the Login screen to the Verification screen.
+
+```swift 
+            .navigationDestination(isPresented: $showVerificationView) {
+                VerificationView()
+            }
+```
+
+Resending the verification code uses a similar `Task` structure as validating a user's phone number using the given API method `checkVerificationToken()`. A string containing the full verification code the user entered in is passed into this method along with their phone number, toggling a boolean for navigating to the Home screen if the code was valid. A loading icon tiggered by the boolean `isLoading` appears as `checkVerificationToken()` processes the code and disappears upon the method's successful completion.
+
+```swift
+            Task {
+                do {
+                    let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
+                    showHomeView = true
+                    isLoading = false
+                } catch  {
+                    invalidCodeAlert = true
+                    isLoading = false
+                    enteredDigits = [String](repeating: "\u{200B}", count: 6)
+                }
+            }
+```
+In terms of invalid verification code checking, `invalidCodeAlert` (as shown in the above code snippet) and displays a dissmable alert and erases the OTP textfield to allow the user to re-enter the code.
