@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+let backSpace: String = "\u{200B}"
+let numOfOTPFields = 6
+
 struct VerificationView: View {
-    @State var enteredDigits = [String](repeating: "\u{200B}", count: 6)
+    @State var enteredDigits = [String](repeating: backSpace, count: numOfOTPFields)
     @FocusState var isFocusedOnField: Int?
     @State var showHomeView = false
     @State var invalidCodeAlert = false
@@ -39,7 +42,7 @@ struct VerificationView: View {
             Spacer()
                 .frame(height: 20)
             HStack {
-                ForEach(0..<6, id: \.self) { index in
+                ForEach(0..<numOfOTPFields, id: \.self) { index in
                     TextField("", text: $enteredDigits[index])
                         .keyboardType(.numberPad)
                         .textContentType(.oneTimeCode)
@@ -50,17 +53,16 @@ struct VerificationView: View {
                         .focused($isFocusedOnField, equals: index)
                         .tag(index)
                         .onChange(of: enteredDigits[index]) {
-                            if enteredDigits[index].count == 2 && index < 5 {
+                            if enteredDigits[index].count == 2 && index < numOfOTPFields - 1 {
                                 isFocusedOnField = (isFocusedOnField ?? 0) + 1
                                 
                             } else if enteredDigits[index].count == 0 && index > 0 {
-                                enteredDigits[index] = "\u{200B}"
+                                enteredDigits[index] = backSpace
                                 isFocusedOnField = (isFocusedOnField ?? 0) - 1
                             }
                             
-                            if index == 5 && enteredDigits[index].count == 2 {
+                            if index ==  numOfOTPFields - 1 && enteredDigits[index].count == 2 {
                                 let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
-                                print(code)
                                 isFocusedOnField = nil
                                 isLoading = true
                                 Task {
@@ -71,7 +73,7 @@ struct VerificationView: View {
                                     } catch  {
                                         invalidCodeAlert = true
                                         isLoading = false
-                                        enteredDigits = [String](repeating: "\u{200B}", count: 6)
+                                        enteredDigits = [String](repeating: backSpace, count: numOfOTPFields)
                                     }
                                 }
                             }
@@ -86,21 +88,7 @@ struct VerificationView: View {
             }
             Spacer()
                 .frame(height: 20)
-            Button("Resend Verification Code") {
-                Task {
-                    do {
-                        let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
-                    } catch let apiError as ApiError {
-                        let _ = apiError.message
-                    }
-                }
-            }
-            .font(.custom(appFont, size: 18.0))
-            .fontWeight(.semibold)
-            .foregroundColor(.white)
-            .padding(.all)
-            .background(Color(buttonBackgroundColor))
-            .cornerRadius(roundedCornerRadius)
+            ResendVerificationButtonView()
         }
         .padding()
         //Cover the entire background with the custom color appBackgroundColor
@@ -113,4 +101,24 @@ struct VerificationView: View {
 
 #Preview {
     VerificationView()
+}
+
+struct ResendVerificationButtonView: View {
+    var body: some View {
+        Button("Resend Verification Code") {
+            Task {
+                do {
+                    let _ = try await Api.shared.sendVerificationToken(e164PhoneNumber: e164PhoneNumber)
+                } catch let apiError as ApiError {
+                    let _ = apiError.message
+                }
+            }
+        }
+        .font(.custom(appFont, size: 18.0))
+        .fontWeight(.semibold)
+        .foregroundColor(.white)
+        .padding(.all)
+        .background(Color(buttonBackgroundColor))
+        .cornerRadius(roundedCornerRadius)
+    }
 }
