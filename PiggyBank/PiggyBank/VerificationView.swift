@@ -25,57 +25,21 @@ struct VerificationView: View {
                     .progressViewStyle(CircularProgressViewStyle())
                     .controlSize(.large)
             }
-            Spacer()
-                .frame(height: 20)
-            Text("Verify Your Code")
-                .font(.custom(appFont, size: 40.0, relativeTo: .title))
-                .fontWeight(.bold)
-                .foregroundColor(.black)
-                .multilineTextAlignment(.center)
-            Spacer()
-                .frame(height: 20)
-            Text("Enter the code sent to your phone number")
-                .font(.custom(appFont, size: 22.0, relativeTo: .title2))
-                .fontWeight(.medium)
-                .foregroundColor(.black)
-                .multilineTextAlignment(.center)
-            Spacer()
-                .frame(height: 20)
+            VerifyYourCodeView()
             HStack {
                 ForEach(0..<numOfOTPFields, id: \.self) { index in
-                    TextField("", text: $enteredDigits[index])
-                        .keyboardType(.numberPad)
-                        .textContentType(.oneTimeCode)
-                        .multilineTextAlignment(.center)
-                        .padding(.all)
-                        .background(.white)
-                        .cornerRadius(roundedCornerRadius)
-                        .focused($isFocusedOnField, equals: index)
-                        .tag(index)
+                    OTPTextField(enteredDigits: $enteredDigits, isFocusedOnField: $isFocusedOnField, index: index)
                         .onChange(of: enteredDigits[index]) {
                             if enteredDigits[index].count == 2 && index < numOfOTPFields - 1 {
                                 isFocusedOnField = (isFocusedOnField ?? 0) + 1
                                 
-                            } else if enteredDigits[index].count == 0 && index > 0 {
+                            } else if enteredDigits[index].isEmpty && index > 0 {
                                 enteredDigits[index] = backSpace
                                 isFocusedOnField = (isFocusedOnField ?? 0) - 1
                             }
                             
-                            if index ==  numOfOTPFields - 1 && enteredDigits[index].count == 2 {
-                                let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
-                                isFocusedOnField = nil
-                                isLoading = true
-                                Task {
-                                    do {
-                                        let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
-                                        showHomeView = true
-                                        isLoading = false
-                                    } catch  {
-                                        invalidCodeAlert = true
-                                        isLoading = false
-                                        enteredDigits = [String](repeating: backSpace, count: numOfOTPFields)
-                                    }
-                                }
+                            if index == numOfOTPFields - 1 && enteredDigits[index].count == 2 {
+                                verifyOTPcode()
                             }
                     }
                 }
@@ -97,10 +61,67 @@ struct VerificationView: View {
         //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
         .preferredColorScheme(.light)
     }
+    
+    func verifyOTPcode() {
+        let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
+        isFocusedOnField = nil
+        isLoading = true
+        Task {
+            do {
+                let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
+                showHomeView = true
+                isLoading = false
+            } catch  {
+                invalidCodeAlert = true
+                isLoading = false
+                enteredDigits = [String](repeating: backSpace, count: numOfOTPFields)
+            }
+        }
+    }
+
 }
 
 #Preview {
     VerificationView()
+}
+
+struct VerifyYourCodeView : View {
+    var body: some View {
+        Spacer()
+            .frame(height: 20)
+        Text("Verify Your Code")
+            .font(.custom(appFont, size: 40.0, relativeTo: .title))
+            .fontWeight(.bold)
+            .foregroundColor(.black)
+            .multilineTextAlignment(.center)
+        Spacer()
+            .frame(height: 20)
+        Text("Enter the code sent to your phone number")
+            .font(.custom(appFont, size: 22.0, relativeTo: .title2))
+            .fontWeight(.medium)
+            .foregroundColor(.black)
+            .multilineTextAlignment(.center)
+        Spacer()
+            .frame(height: 20)
+    }
+}
+
+struct OTPTextField: View {
+    @Binding var enteredDigits : [String]
+    @FocusState.Binding var isFocusedOnField: Int?
+    var index: Int
+    
+    var body : some View {
+        TextField("", text: $enteredDigits[index])
+            .keyboardType(.numberPad)
+            .textContentType(.oneTimeCode)
+            .multilineTextAlignment(.center)
+            .padding(.all)
+            .background(.white)
+            .cornerRadius(roundedCornerRadius)
+            .focused($isFocusedOnField, equals: index)
+            .tag(index)
+    }
 }
 
 struct ResendVerificationButtonView: View {
