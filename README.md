@@ -110,7 +110,36 @@ The navigation for PiggyBank's different screens is done using SwiftUI's `Naviga
             }
 ```
 
-Resending the verification code uses a similar `Task` structure as validating a user's phone number using the given API method `checkVerificationToken()`. A string containing the full verification code the user entered in is passed into this method along with their phone number, toggling a boolean for navigating to the Home screen if the code was valid. A loading icon tiggered by the boolean `isLoading` appears as `checkVerificationToken()` processes the code and disappears upon the method's successful completion.
+The implementation for the OTP-style textfields uses six textfields each given their own tag. An optional `@FocusState` called `isFocusedOnField` is used to keep track of which textfield the cursor is on. To account for mistyping the verification code, in the `.onchange` modifier, there are checks to account for moving the cursor forward and backward (as shown in the code sample below). 
+
+The cases are as follows:
+- **Case 1**: If a textfield has the backspace character along with the digit the user types and the index is less than five, the cursor will move forward
+- **Case 2**: If the textfield is empty and the index is not in the first position of the array storing the entered digits, before deletion, the backspace character is added and the cursor moves to the previous textfield.
+- **Case 3**: When the user is done typing the code and the last textfield has a count of two to account for the backspace character and the digit, `verifyOTPCode()` is called to check if the OTP code entered is valid.
+
+```swift
+        .onChange(of: enteredDigits[index]) {
+            /* When a textfield has the backspace character + the entered digit
+            and the index is less than five, move to the next textfield.*/
+            if enteredDigits[index].count == 2 && index < numOfOTPFields - 1 {
+                isFocusedOnField = (isFocusedOnField ?? 0) + 1
+              
+            /* Otherwise if the textfield if empty and the index is not the first index of the array,
+                before deletion, add the backspace character, delete the digit, and move back one textfield.*/
+            } else if enteredDigits[index].isEmpty && index > 0 {
+                enteredDigits[index] = backSpace
+                isFocusedOnField = (isFocusedOnField ?? 0) - 1
+            }
+            
+            /* When the cursor is on the last textfield and the count for the textfield is 2
+            (which contains the backspace character + the entered digit), verify the code the user entered.*/
+            if index == numOfOTPFields - 1 && enteredDigits[index].count == 2 {
+                verifyOTPcode()
+            }
+    }
+```
+
+Verifying the entered code uses a similar `Task` structure as validating a user's phone number using the given API method `checkVerificationToken()`. A string containing the full verification code the user entered in is passed into this method along with their phone number, toggling a boolean for navigating to the Home screen if the code was valid. A loading icon tiggered by the boolean `isLoading` appears as `checkVerificationToken()` processes the code and disappears upon the method's successful completion.
 
 ```swift
             Task {
@@ -121,8 +150,10 @@ Resending the verification code uses a similar `Task` structure as validating a 
                 } catch  {
                     invalidCodeAlert = true
                     isLoading = false
-                    enteredDigits = [String](repeating: "\u{200B}", count: 6)
+                    enteredDigits = [String](repeating: backspace, count: numOfOTPFields)
                 }
             }
 ```
 In terms of invalid verification code checking, `invalidCodeAlert` (as shown in the above code snippet) and displays a dissmable alert and erases the OTP textfield to allow the user to re-enter the code.
+
+Resending the verification code follows the same `Task` logic as the sending the verification code. Using the async/await structure, if `sendVerificationToken()` was successful, it will send a new verification code to the entered phone number.

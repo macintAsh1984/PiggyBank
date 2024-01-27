@@ -111,7 +111,7 @@ struct VerificationButtonView: View {
     
     var body: some View {
         Button("Get Verification Code") {
-            //When the user taps the "Get Verification Code" button, the numberkey pad is dismissed. If the phone number entered is not the correct format or has more than 10 digits, an alert prompt will appear.
+            //When the user taps the "Get Verification Code" button, the numberkey pad is dismissed. If the phone number entered is not the correct format or has more than 10 digits, an alert prompt will appear. If the phone number is correct, the API sends the code to phone number.
             numberIsFocused = false
             Task {
                 do {
