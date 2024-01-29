@@ -33,6 +33,7 @@ struct VerificationView: View {
                 //Create 6 textfields for the 6 digit verification code.
                 ForEach(0..<numOfOTPFields, id: \.self) { index in
                     OTPTextField(enteredDigits: $enteredDigits, isFocusedOnField: $isFocusedOnField, index: index)
+                        .allowsHitTesting(isFocusedOnField == index)
                         .onChange(of: enteredDigits[index]) {
                             /* When a textfield has the backspace character + the entered digit
                             and the index is less than five, move to the next textfield.*/
@@ -52,6 +53,11 @@ struct VerificationView: View {
                                 verifyOTPcode()
                             }
                     }
+                        .onAppear {
+                            if index == 0 {
+                                isFocusedOnField = index
+                            }
+                        }
                 }
             }
             .navigationDestination(isPresented: $showHomeView) {
