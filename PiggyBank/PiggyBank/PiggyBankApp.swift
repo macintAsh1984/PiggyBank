@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct PiggyBankApp: App {
+    @StateObject var piggyBankUser = PiggyBankUser()
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
+            RootView()
+                .environmentObject(piggyBankUser)
         }
     }
 }
