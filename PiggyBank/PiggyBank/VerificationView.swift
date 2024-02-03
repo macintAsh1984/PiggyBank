@@ -18,7 +18,7 @@ struct VerificationView: View {
     @State var showHomeView = false
     @State var invalidCodeAlert = false
     @State var isLoading = false
-    
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
     
     var body: some View {
         VStack {
@@ -62,6 +62,7 @@ struct VerificationView: View {
             }
             .navigationDestination(isPresented: $showHomeView) {
                 HomePageView()
+                    .environmentObject(piggyBankUser)
             }
             .alert("Invalid Code", isPresented: $invalidCodeAlert) {
                 Button("OK") { }
@@ -84,12 +85,14 @@ struct VerificationView: View {
         let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
         isFocusedOnField = nil
         isLoading = true
+        piggyBankUser.setPhoneNumber(phoneNumber: e164PhoneNumber)
         
         /* If the code verification verfied the code the user entered, navigate to the home screen.
         If code verification couldn't verify the code, show an alert and erase what is currently in the textfields.*/
         Task {
             do {
-                let _ = try await Api.shared.checkVerificationToken(e164PhoneNumber: e164PhoneNumber, code: code)
+                try await piggyBankUser.saveAuthToken(e164phoneNumber: e164PhoneNumber, code: code)
+                piggyBankUser.loadUser()
                 showHomeView = true
                 isLoading = false
             } catch  {
@@ -102,9 +105,9 @@ struct VerificationView: View {
 
 }
 
-#Preview {
-    VerificationView()
-}
+//#Preview {
+//    VerificationView()
+//}
 
 struct VerifyYourCodeTextView : View {
     var body: some View {

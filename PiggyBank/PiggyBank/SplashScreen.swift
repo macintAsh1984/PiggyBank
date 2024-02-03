@@ -9,11 +9,14 @@ import SwiftUI
 
 struct SplashScreen: View {
     @State var splashScreenIsActive = false
+    @State var showHomeView = false
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
     
     var body: some View {
         //To prevent the splash screen from being stuck on the screen, show the main app view when the toggle, splashScreenIsActive is true.
         if splashScreenIsActive {
-            ContentView()
+            LoginView()
+                .environmentObject(piggyBankUser)
         } else {
             VStack {
                 VStack {
@@ -28,6 +31,14 @@ struct SplashScreen: View {
             .background(Color(appBackgroundColor))
             .preferredColorScheme(.light)
             .onAppear {
+                Task {
+                    do {
+                        piggyBankUser.loadUser()
+                        showHomeView = true
+                    } catch {
+                        showHomeView = false
+                    }
+                }
                 //The splashscreen will stay onscreen for 2 seconds.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     withAnimation {

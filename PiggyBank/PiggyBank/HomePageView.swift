@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomePageView: View {
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -27,6 +29,8 @@ struct HomePageView: View {
                 ToolbarItem {
                     NavigationLink {
                         AccountSettings()
+                            .environmentObject(piggyBankUser)
+                        
                     } label: {
                         Image(systemName: "gear")
                     }
@@ -40,6 +44,6 @@ struct HomePageView: View {
     }
 }
 
-#Preview {
-    HomePageView()
-}
+//#Preview {
+//    HomePageView()
+//}

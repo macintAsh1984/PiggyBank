@@ -12,13 +12,16 @@
 		AB48CECA2B60E7D400FA6702 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB48CEC92B60E7D400FA6702 /* HomePageView.swift */; };
 		AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6CA9802B5D034600C445F6 /* VerificationView.swift */; };
 		AB6F9FB22B67374F003E7426 /* AccountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6F9FB12B67374F003E7426 /* AccountSettings.swift */; };
+		AB6F9FB42B6898E2003E7426 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6F9FB32B6898E2003E7426 /* UserViewModel.swift */; };
+		AB8CF2812B6B805600EB27B4 /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8CF2802B6B805600EB27B4 /* LoadingScreen.swift */; };
 		ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */; };
-		ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */; };
+		ABA0A5042B51DC2F00A8B7BA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA0A5032B51DC2F00A8B7BA /* LoginView.swift */; };
 		ABA0A5062B51DC3200A8B7BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */; };
 		ABA0A5092B51DC3200A8B7BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA0A5082B51DC3200A8B7BA /* Preview Assets.xcassets */; };
 		ABD9467D2B5534FD0087A507 /* CandyBeans.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467A2B5534FD0087A507 /* CandyBeans.otf */; };
 		ABD9467E2B5534FD0087A507 /* Get Commercial License.url in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467B2B5534FD0087A507 /* Get Commercial License.url */; };
 		ABD9467F2B5534FD0087A507 /* FSLA_NonCommercial_License.html in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */; };
+		ABE3CBB82B6D782B0033D594 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE3CBB72B6D782B0033D594 /* RootView.swift */; };
 		ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF4E4362B60BC8700A7D5FD /* Api.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,15 +30,18 @@
 		AB48CEC92B60E7D400FA6702 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		AB6CA9802B5D034600C445F6 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		AB6F9FB12B67374F003E7426 /* AccountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettings.swift; sourceTree = "<group>"; };
+		AB6F9FB32B6898E2003E7426 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		AB8CF2802B6B805600EB27B4 /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		ABA0A4FE2B51DC2F00A8B7BA /* PiggyBank.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PiggyBank.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiggyBankApp.swift; sourceTree = "<group>"; };
-		ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		ABA0A5032B51DC2F00A8B7BA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ABA0A5082B51DC3200A8B7BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ABD9467A2B5534FD0087A507 /* CandyBeans.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CandyBeans.otf; sourceTree = "<group>"; };
 		ABD9467B2B5534FD0087A507 /* Get Commercial License.url */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Get Commercial License.url"; sourceTree = "<group>"; };
 		ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FSLA_NonCommercial_License.html; sourceTree = "<group>"; };
 		ABD946802B55374D0087A507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		ABE3CBB72B6D782B0033D594 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		ABF4E4362B60BC8700A7D5FD /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,13 +77,16 @@
 			isa = PBXGroup;
 			children = (
 				ABD946802B55374D0087A507 /* Info.plist */,
-				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
-				ABA0A5032B51DC2F00A8B7BA /* ContentView.swift */,
-				AB6F9FB12B67374F003E7426 /* AccountSettings.swift */,
 				ABF4E4362B60BC8700A7D5FD /* Api.swift */,
-				AB48CEC92B60E7D400FA6702 /* HomePageView.swift */,
-				AB6CA9802B5D034600C445F6 /* VerificationView.swift */,
+				AB6F9FB32B6898E2003E7426 /* UserViewModel.swift */,
+				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */,
+				ABE3CBB72B6D782B0033D594 /* RootView.swift */,
+				ABA0A5032B51DC2F00A8B7BA /* LoginView.swift */,
+				AB6CA9802B5D034600C445F6 /* VerificationView.swift */,
+				AB6F9FB12B67374F003E7426 /* AccountSettings.swift */,
+				AB8CF2802B6B805600EB27B4 /* LoadingScreen.swift */,
+				AB48CEC92B60E7D400FA6702 /* HomePageView.swift */,
 				ABD946792B5534FD0087A507 /* Fonts */,
 				ABA0A5052B51DC3200A8B7BA /* Assets.xcassets */,
 				ABA0A5072B51DC3200A8B7BA /* Preview Content */,
@@ -183,12 +192,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB3435ED2B56F3EE001D4B4A /* SplashScreen.swift in Sources */,
-				ABA0A5042B51DC2F00A8B7BA /* ContentView.swift in Sources */,
+				AB6F9FB42B6898E2003E7426 /* UserViewModel.swift in Sources */,
+				ABA0A5042B51DC2F00A8B7BA /* LoginView.swift in Sources */,
 				ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */,
+				ABE3CBB82B6D782B0033D594 /* RootView.swift in Sources */,
 				ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */,
 				AB6F9FB22B67374F003E7426 /* AccountSettings.swift in Sources */,
 				AB48CECA2B60E7D400FA6702 /* HomePageView.swift in Sources */,
 				AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */,
+				AB8CF2812B6B805600EB27B4 /* LoadingScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

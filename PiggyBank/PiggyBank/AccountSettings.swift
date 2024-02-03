@@ -9,14 +9,26 @@ import SwiftUI
 
 struct AccountSettings: View {
     @State var username: String = ""
-    @State var phoneNumber: String = e164PhoneNumber
+    @FocusState var keyboardFocus: Bool
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+        
     var body: some View {
         NavigationStack {
             VStack {
-                UserInfoView(username: $username, phoneNumber: $phoneNumber)
+                TextField("Username", text: $piggyBankUser.name)
+                    .padding(.all)
+                    .focused($keyboardFocus)
+                    .background(.white)
+                    .cornerRadius(roundedCornerRadius)
+                TextField("", text: $piggyBankUser.phoneNumber)
+                    .padding(.all)
+                    .focused($keyboardFocus)
+                    .background(.white)
+                    .cornerRadius(roundedCornerRadius)
                 Spacer()
                     .frame(height: 20)
                 LogoutButtonView()
+                    .environmentObject(piggyBankUser)
                 Spacer()
             }
             .navigationTitle("Settings")
@@ -26,10 +38,11 @@ struct AccountSettings: View {
             .toolbarColorScheme(.light)
             .toolbar {
                 ToolbarItem {
-                    NavigationLink {
-                        //Save username
-                    } label: {
-                        Text("Save")
+                    Button("Save") {
+                        Task {
+                            guard let authToken = piggyBankUser.authToken else {throw piggyBankUser.noAuthTokenError}
+                            try await piggyBankUser.saveUserName(name: piggyBankUser.name, authToken: authToken)
+                        }
                     }
                 }
             }
@@ -39,35 +52,27 @@ struct AccountSettings: View {
             .background(Color(appBackgroundColor))
             //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
             .preferredColorScheme(.light)
+            .onTapGesture {
+                keyboardFocus = false
+            }
+            .onAppear {
+                piggyBankUser.loadUserName()
+                piggyBankUser.loadPhoneNumber()
+            }
         }
     }
 }
 
-#Preview {
-    AccountSettings()
-}
+//#Preview {
+//    AccountSettings()
+//}
 
-struct UserInfoView: View {
-    @Binding var username: String
-    @Binding var phoneNumber: String
-    
-    var body: some View {
-        TextField("Username", text: $username)
-            .padding(.all)
-            .background(.white)
-            .cornerRadius(roundedCornerRadius)
-        TextField("", text: $phoneNumber)
-            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-            .padding(.all)
-            .background(.white)
-            .cornerRadius(roundedCornerRadius)
-    }
-}
 
 struct LogoutButtonView: View {
     var body: some View {
         Button("Logout") {
             // Logout of account.
+            //Drop keyboard focus
         }
         .font(.custom(appFont, size: 18.0))
         .fontWeight(.semibold)
