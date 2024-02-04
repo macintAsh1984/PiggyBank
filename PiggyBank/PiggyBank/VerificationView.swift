@@ -99,6 +99,7 @@ struct VerificationView: View {
                 invalidCodeAlert = true
                 isLoading = false
                 enteredDigits = [String](repeating: backSpace, count: numOfOTPFields)
+                isFocusedOnField = 0
             }
         }
     }
