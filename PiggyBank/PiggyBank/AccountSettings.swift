@@ -27,7 +27,7 @@ struct AccountSettings: View {
                     .cornerRadius(roundedCornerRadius)
                 Spacer()
                     .frame(height: 20)
-                LogoutButtonView()
+                LogoutButtonView(keyboardFocus: $keyboardFocus)
                     .environmentObject(piggyBankUser)
                 Spacer()
             }
@@ -69,10 +69,31 @@ struct AccountSettings: View {
 
 
 struct LogoutButtonView: View {
+    @FocusState.Binding var keyboardFocus: Bool
+    @State var returnToRootView = false
+    @State var logOutAlert = false
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    
     var body: some View {
         Button("Logout") {
-            // Logout of account.
-            //Drop keyboard focus
+            keyboardFocus = false
+            logOutAlert = true
+        }
+        .alert (isPresented: $logOutAlert) {
+            Alert(
+                title: Text("Are you sure you want to log out?"),
+                message: Text("This cannot be undone."),
+                primaryButton: .destructive(Text("Logout")) {
+                    piggyBankUser.logOut()
+                    returnToRootView = true
+                },
+                secondaryButton: .cancel()
+            
+            )
+        }
+        .navigationDestination(isPresented: $returnToRootView) {
+            LoginView()
+                .environmentObject(piggyBankUser)
         }
         .font(.custom(appFont, size: 18.0))
         .fontWeight(.semibold)

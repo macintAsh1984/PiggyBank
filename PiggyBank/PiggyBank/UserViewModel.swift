@@ -67,4 +67,14 @@ class PiggyBankUser: ObservableObject {
         
     }
     
+    func logOut() {
+        UserDefaults.standard.removeObject(forKey: "authToken")
+        UserDefaults.standard.removeObject(forKey: "name")
+        UserDefaults.standard.removeObject(forKey: "phoneNumber")
+        self.name = String()
+        self.phoneNumber = String()
+        self.authToken = nil
+        self.accounts = [Account]()
+    }
+    
 }
