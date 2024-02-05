@@ -95,7 +95,7 @@ struct VerificationView: View {
                 piggyBankUser.setVerificationCode(code)
                 try await piggyBankUser.recordAuthTokenTime()
                 
-                piggyBankUser.loadUser()
+                piggyBankUser.loadUserAuthToken()
                 showHomeView = true
                 isLoading = false
             } catch  {
@@ -108,10 +108,6 @@ struct VerificationView: View {
     }
 
 }
-
-//#Preview {
-//    VerificationView()
-//}
 
 struct VerifyYourCodeTextView : View {
     var body: some View {

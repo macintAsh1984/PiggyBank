@@ -146,7 +146,3 @@ struct VerificationButtonView: View {
 
     }
 }
-
-//#Preview {
-//    LoginView()
-//}

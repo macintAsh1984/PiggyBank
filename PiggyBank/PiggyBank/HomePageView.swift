@@ -21,11 +21,13 @@ struct HomePageView: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
-                Text("$0.00")
-                    .font(.custom(appFont, size: 40.0, relativeTo: .title))
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.black)
+                if let balance = piggyBankUser.activeUser?.accounts.first?.balanceInUsd() ?? Optional<Double>(0.00) {
+                    Text(String(format: "$%0.02f", balance))
+                        .font(.custom(appFont, size: 40.0, relativeTo: .title))
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                }
                 switch (noAccounts, displayEmptyTextView) {
                     case (true, _):
                         Text("No accounts created")
@@ -77,8 +79,3 @@ struct HomePageView: View {
         }
     }
 }
-
-//#Preview {
-//    HomePageView()
-//        .environmentObject(PiggyBankUser)
-//}

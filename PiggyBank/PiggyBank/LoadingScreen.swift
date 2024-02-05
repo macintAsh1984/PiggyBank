@@ -22,7 +22,7 @@ struct LoadingScreen: View {
                 }
             }
             .onAppear {
-                piggyBankUser.loadAuthTokenTime()
+                piggyBankUser.loadAuthTokenTimeFromDisk()
                 loadingHomePage = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + piggyBankUser.authTokenTime) {
                     loadingHomePage = false
@@ -42,9 +42,4 @@ struct LoadingScreen: View {
         }
     }
     
-}
-
-#Preview {
-    LoadingScreen()
-        .environmentObject(PiggyBankUser())
 }

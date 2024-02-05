@@ -30,7 +30,7 @@ struct SplashScreen: View {
             .background(Color(appBackgroundColor))
             .preferredColorScheme(.light)
             .onAppear {
-                piggyBankUser.loadUser()
+                piggyBankUser.loadUserAuthToken()
 
                 //The splashscreen will stay onscreen for 2 seconds.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -41,8 +41,4 @@ struct SplashScreen: View {
             }
         }
     }
-}
-
-#Preview {
-    SplashScreen()
 }

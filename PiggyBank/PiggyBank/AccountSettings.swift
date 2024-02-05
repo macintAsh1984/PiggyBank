@@ -41,7 +41,7 @@ struct AccountSettings: View {
                     Button("Save") {
                         Task {
                             guard let authToken = piggyBankUser.authToken else {throw piggyBankUser.noAuthTokenError}
-                            try await piggyBankUser.saveUserName(name: piggyBankUser.name, authToken: authToken)
+                            try await piggyBankUser.saveNewUserName(name: piggyBankUser.name, authToken: authToken)
                         }
                     }
                 }
@@ -62,11 +62,6 @@ struct AccountSettings: View {
         }
     }
 }
-
-//#Preview {
-//    AccountSettings()
-//}
-
 
 struct LogoutButtonView: View {
     @FocusState.Binding var keyboardFocus: Bool
