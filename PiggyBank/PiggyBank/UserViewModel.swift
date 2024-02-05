@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class PiggyBankUser: ObservableObject {
+@MainActor class PiggyBankUser: ObservableObject {
     @Published var name: String = String()
     @Published var phoneNumber: String = String()
     @Published var authToken: String?
@@ -57,15 +57,18 @@ class PiggyBankUser: ObservableObject {
     }
     
     func loadAuthTokenTime() {
-        if let authTokenTime = UserDefaults.standard.double(forKey: "totalTime") as? Double {
-            self.authTokenTime = authTokenTime
-        } else {
-            print("hi")
-        }
+        let authTokenTime = UserDefaults.standard.double(forKey: "totalTime")
+        self.authTokenTime = authTokenTime
     }
     
     func setUserName(username: String) {
-        self.name = username
+        if let existingUserName = self.activeUser?.accounts.first?.name {
+            if !existingUserName.isEmpty {
+                self.name = self.activeUser?.name ?? username
+            } else {
+                self.name = username
+            }
+        }
     }
     
     func setPhoneNumber(phoneNumber: String) {
