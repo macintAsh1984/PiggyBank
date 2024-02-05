@@ -92,6 +92,9 @@ struct VerificationView: View {
         Task {
             do {
                 try await piggyBankUser.saveAuthToken(e164phoneNumber: e164PhoneNumber, code: code)
+                piggyBankUser.setVerificationCode(code)
+                try await piggyBankUser.recordAuthTokenTime()
+                
                 piggyBankUser.loadUser()
                 showHomeView = true
                 isLoading = false

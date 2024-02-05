@@ -16,8 +16,8 @@ struct RootView: View {
                 .environmentObject(piggyBankUser)
         default:
             //Replace with loading screen later
-            HomePageView()
-                .environmentObject(piggyBankUser)
+                LoadingScreen()
+                    .environmentObject(piggyBankUser)
         }
     }
 }

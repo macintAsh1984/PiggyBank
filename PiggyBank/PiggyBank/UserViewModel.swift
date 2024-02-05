@@ -8,19 +8,49 @@
 import SwiftUI
 
 class PiggyBankUser: ObservableObject {
-    @Published var name: String = ""
-    @Published var phoneNumber: String = ""
+    @Published var name: String = String()
+    @Published var phoneNumber: String = String()
     @Published var authToken: String?
     @Published var accounts: [Account] = [Account]()
+    @Published var authTokenTime: TimeInterval = 0
+    @Published var verificationCode: String = String()
     
     
     let noAuthTokenError = ApiError(errorCode: "no_auth_token_error", message: "No auth token has been set for this user")
     let setAuthTokenError = ApiError(errorCode: "set_auth_token_error", message: "Failed to set user auth token")
     let setUserNameError = ApiError(errorCode: "set_user_name_error", message: "Failed to set username")
+    let unknownError = ApiError(errorCode: "unknown_error", message: "An unexpected error occured")
+    
+    func setVerificationCode(_ to: String) {
+        self.verificationCode = to
+    }
     
     func saveAuthToken(e164phoneNumber: String, code: String) async throws {
         guard let checkVerificationResponse = try? await Api.shared.checkVerificationToken(e164PhoneNumber: e164phoneNumber, code: code) else { throw setAuthTokenError }
         UserDefaults.standard.setValue(checkVerificationResponse.authToken, forKey: "authToken")
+    }
+    
+    func recordAuthTokenTime() async throws {
+        let startTime = Date()
+        Task {
+            do {
+                guard let _ = try? await Api.shared.checkVerificationToken(e164PhoneNumber: self.phoneNumber, code: self.verificationCode) else { throw setAuthTokenError }
+            } catch {
+                throw unknownError
+            }
+            
+            let stopTime = Date()
+            let totalTime = stopTime.timeIntervalSince(startTime)
+            UserDefaults.standard.setValue(totalTime, forKey: "totalTime")
+        }
+    }
+    
+    func loadAuthTokenTime() {
+        if let authTokenTime = UserDefaults.standard.double(forKey: "totalTime") as? Double {
+            self.authTokenTime = authTokenTime
+        } else {
+            print("hi")
+        }
     }
     
     func setUserName(username: String) {
@@ -32,13 +62,13 @@ class PiggyBankUser: ObservableObject {
         UserDefaults.standard.setValue(self.phoneNumber, forKey: "phoneNumber")
     }
     
-    func getPhoneNumber() -> String {
-        return self.phoneNumber
-    }
-    
     func saveUserName(name: String, authToken: String) async throws {
         guard let username = try? await Api.shared.setUserName(authToken: authToken, name: name) else { throw setUserNameError }
         UserDefaults.standard.setValue(username.user.name, forKey: "name")
+    }
+    
+    func getAuthToken() async -> String? {
+        return self.authToken
     }
     
     func loadUserName() {
