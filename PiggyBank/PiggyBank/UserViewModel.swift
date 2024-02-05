@@ -11,7 +11,9 @@ class PiggyBankUser: ObservableObject {
     @Published var name: String = String()
     @Published var phoneNumber: String = String()
     @Published var authToken: String?
-    @Published var accounts: [Account] = [Account]()
+    
+    @Published var activeUser: User?
+    
     @Published var authTokenTime: TimeInterval = 0
     @Published var verificationCode: String = String()
     
@@ -42,6 +44,15 @@ class PiggyBankUser: ObservableObject {
             let stopTime = Date()
             let totalTime = stopTime.timeIntervalSince(startTime)
             UserDefaults.standard.setValue(totalTime, forKey: "totalTime")
+        }
+    }
+    
+    func createUser(authToken: String) async throws {
+        do {
+            let userResponse = try await Api.shared.user(authToken: authToken)
+            self.activeUser = userResponse.user
+        } catch {
+            throw unknownError
         }
     }
     
@@ -104,7 +115,7 @@ class PiggyBankUser: ObservableObject {
         self.name = String()
         self.phoneNumber = String()
         self.authToken = nil
-        self.accounts = [Account]()
+        self.activeUser = nil
     }
     
 }
