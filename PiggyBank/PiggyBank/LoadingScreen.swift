@@ -15,6 +15,7 @@ struct LoadingScreen: View {
     var body: some View {
         NavigationStack {
             VStack (alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/) {
+                // Show a loading icon to indicate Home page loading when possible.
                 if loadingHomePage {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -29,14 +30,16 @@ struct LoadingScreen: View {
                     .environmentObject(piggyBankUser)
             }
             .padding()
-            //Cover the entire background with the custom color appBackgroundColor
+            // Cover the entire background with the custom color appBackgroundColor
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
             .background(Color(appBackgroundColor))
-            //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
+            // Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
             .preferredColorScheme(.light)
         }
     }
     
+    /* To load the Home Page, fetch the authentication token from disk
+     and show the loading screen for the amount of time it takes to generate an authentication token.*/
     func loadHomePage() {
         piggyBankUser.loadAuthTokenTimeFromDisk()
         loadingHomePage = true

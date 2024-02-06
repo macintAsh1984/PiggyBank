@@ -12,8 +12,10 @@ import SwiftUI
     @Published var phoneNumber: String = String()
     @Published var authToken: String?
     
+    //Contains the user that is currently logged in
     @Published var activeUser: User?
     
+    //Stores the time it takes to create the authentication token.
     @Published var authTokenTime: TimeInterval = 0
     @Published var verificationCode: String = String()
     
@@ -39,7 +41,7 @@ import SwiftUI
         UserDefaults.standard.setValue(self.phoneNumber, forKey: "phoneNumber")
     }
     
-    //Functions For Authentication Token Logic
+    // Functions For Authentication Token Logic
     func saveAuthToken(e164phoneNumber: String, code: String) async throws {
         guard let checkVerificationResponse = try? await Api.shared.checkVerificationToken(e164PhoneNumber: e164phoneNumber, code: code) 
         else { throw createAuthTokenError }
@@ -47,15 +49,18 @@ import SwiftUI
     }
     
     func recordAuthTokenTime() async throws {
+        // Start recording the time it takes to create the authentication token.
         let startTime = Date()
         Task {
             do {
-                guard let _ = try? await Api.shared.checkVerificationToken(e164PhoneNumber: self.phoneNumber, code: self.verificationCode) 
+                // Create an authentication token for a new user.
+                guard let _ = try? await Api.shared.checkVerificationToken(e164PhoneNumber: self.phoneNumber, code: self.verificationCode)
                 else { throw createAuthTokenError }
             } catch {
                 throw unknownError
             }
             
+            // Stop recording the time, determine the total time, and store it in disk to use for the loading screen.
             let stopTime = Date()
             let totalTime = stopTime.timeIntervalSince(startTime)
             UserDefaults.standard.setValue(totalTime, forKey: "totalTime")
@@ -65,6 +70,8 @@ import SwiftUI
     // Functions Related To User and Username Logic
     func createUser(authToken: String) async throws {
         do {
+            /* Make an API to retrieve a UserResponse that contains the user and store it
+             in the activeUser attribute of this view model.*/
             let userResponse = try await Api.shared.user(authToken: authToken)
             self.activeUser = userResponse.user
         } catch {
@@ -73,6 +80,8 @@ import SwiftUI
     }
     
     func saveNewUserName(name: String, authToken: String) async throws {
+        /* Make an API call and set the name attribute of this view model
+        with the new username a user enters in Settings.*/
         guard let username = try? await Api.shared.setUserName(authToken: authToken, name: name)
         else { throw setUserNameError }
         self.name = username.user.name ?? name
@@ -82,6 +91,9 @@ import SwiftUI
     
     //Functions Related To Loading Account Information From Disk
     func loadUserName() {
+        /* Determine if a user with an account already has an existing username
+        and set the name attribute of this view model to that existing username.
+        If no existing username is on file, then set the name attribute to what they enter in Settings.*/
         if let existingUserName = self.activeUser?.accounts.first?.name {
             if !existingUserName.isEmpty {
                 self.name = existingUserName
@@ -93,6 +105,8 @@ import SwiftUI
     }
     
     func loadPhoneNumber() {
+        /* Retrieve the phone number from disk and set the phoneNumber attribute
+         of this view model to that phone number.*/
         if let phoneNumber =  UserDefaults.standard.string(forKey: "phoneNumber") {
             self.phoneNumber = phoneNumber
         } else {
@@ -101,6 +115,8 @@ import SwiftUI
     }
 
     func loadUserAuthToken() {
+        /* Retrieve the authentication token from disk and set the authToken attribute
+         of this view model to that token.*/
         if let authToken =  UserDefaults.standard.string(forKey: "authToken") {
             self.authToken = authToken
         } else {
@@ -110,12 +126,16 @@ import SwiftUI
     }
     
     func loadAuthTokenTimeFromDisk() {
+        /* Store the record time it takes to generate an authentication token to disk and
+         assign its value to the authTokenTime attribute of this view model.*/
         let authTokenTime = UserDefaults.standard.double(forKey: "totalTime")
         self.authTokenTime = authTokenTime
     }
     
     // Function That Related To User Logout
     func logOut() {
+        /* Remove the user's authentication token, username, and phoneNumber
+        from disk and set all view model attributes to empty strings or nil.*/
         UserDefaults.standard.removeObject(forKey: "authToken")
         UserDefaults.standard.removeObject(forKey: "name")
         UserDefaults.standard.removeObject(forKey: "phoneNumber")

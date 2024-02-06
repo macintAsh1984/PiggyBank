@@ -32,6 +32,7 @@ struct AccountSettings: View {
                 ToolbarItem {
                     Button("Save") {
                         Task {
+                            // When clicking the "Save" button, save the new username the user entered into the textfield.
                             guard let authToken = piggyBankUser.authToken else {throw piggyBankUser.noAuthTokenError}
                             try await piggyBankUser.saveNewUserName(name: piggyBankUser.name, authToken: authToken)
                         }
@@ -39,15 +40,16 @@ struct AccountSettings: View {
                 }
             }
             .padding()
-            //Cover the entire background with the custom color appBackgroundColor
+            // Cover the entire background with the custom color appBackgroundColor
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
             .background(Color(appBackgroundColor))
-            //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
+            // Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
             .preferredColorScheme(.light)
             .onTapGesture {
                 keyboardFocus = false
             }
             .onAppear {
+                // Once the Settings page appears, load the username and phonenumber from disk to be shown in the textfields.
                 piggyBankUser.loadUserName()
                 piggyBankUser.loadPhoneNumber()
             }
@@ -61,6 +63,7 @@ struct AccountInfoView: View {
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     
     var body: some View {
+        // Show the existing username (if available) and phone number in the respective textfields.
         TextField("Username", text: $piggyBankUser.name)
             .padding(.all)
             .focused($keyboardFocus)
@@ -85,6 +88,8 @@ struct LogoutButtonView: View {
             keyboardFocus = false
             logOutAlert = true
         }
+        /* Present an alert asking the user if they want to proceed with logging out.
+        If so, call the view model's logOut() method and have the RootView determine what screen to display.*/
         .alert (isPresented: $logOutAlert) {
             Alert(
                 title: Text("Are you sure you want to log out?"),

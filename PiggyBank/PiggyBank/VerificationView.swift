@@ -30,7 +30,7 @@ struct VerificationView: View {
             }
             VerifyYourCodeTextView()
             HStack {
-                //Create 6 textfields for the 6 digit verification code.
+                // Create 6 textfields for the 6 digit verification code.
                 ForEach(0..<numOfOTPFields, id: \.self) { index in
                     OTPTextField(enteredDigits: $enteredDigits, isFocusedOnField: $isFocusedOnField, index: index)
                         .allowsHitTesting(isFocusedOnField == index)
@@ -72,10 +72,10 @@ struct VerificationView: View {
             ResendVerificationButtonView()
         }
         .padding()
-        //Cover the entire background with the custom color appBackgroundColor
+        // Cover the entire background with the custom color appBackgroundColor
         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
         .background(Color(appBackgroundColor))
-        //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
+        // Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
         .preferredColorScheme(.light)
     }
     
@@ -85,12 +85,17 @@ struct VerificationView: View {
         let code = enteredDigits.joined().filter {$0 != "\u{200B}"}
         isFocusedOnField = nil
         isLoading = true
+        
+        // Set the user's phone number in the view model.
         piggyBankUser.setPhoneNumber(phoneNumber: e164PhoneNumber)
         
         /* If the code verification verfied the code the user entered, navigate to the home screen.
         If code verification couldn't verify the code, show an alert and erase what is currently in the textfields.*/
         Task {
             do {
+                
+                /* Save the authentication token during code verification,
+                set the code in the view model, and begin recording the time it takes to generate the token.*/
                 try await piggyBankUser.saveAuthToken(e164phoneNumber: e164PhoneNumber, code: code)
                 piggyBankUser.setVerificationCode(code)
                 try await piggyBankUser.recordAuthTokenTime()

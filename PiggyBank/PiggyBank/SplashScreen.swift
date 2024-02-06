@@ -12,7 +12,8 @@ struct SplashScreen: View {
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     
     var body: some View {
-        //To prevent the splash screen from being stuck on the screen, show the main app view when the toggle, splashScreenIsActive is true.
+        /* To prevent the splash screen from being stuck on the screen, show the main app view when the toggle,
+         splashScreenIsActive is true.*/
         if splashScreenIsActive {
             LoginView()
                 .environmentObject(piggyBankUser)
@@ -30,9 +31,10 @@ struct SplashScreen: View {
             .background(Color(appBackgroundColor))
             .preferredColorScheme(.light)
             .onAppear {
+                // Load the user's authentication token from disk.
                 piggyBankUser.loadUserAuthToken()
 
-                //The splashscreen will stay onscreen for 2 seconds.
+                // The splashscreen will stay onscreen for 2 seconds.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     withAnimation {
                         self.splashScreenIsActive = true
