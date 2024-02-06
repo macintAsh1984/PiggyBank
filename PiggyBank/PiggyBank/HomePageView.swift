@@ -11,6 +11,7 @@ struct HomePageView: View {
     @State var noAccounts = false
     @State var displayEmptyTextView = true
     @EnvironmentObject var piggyBankUser: PiggyBankUser
+    let noBalance: Double? = 0.00
     
     var body: some View {
         NavigationStack {
@@ -21,7 +22,7 @@ struct HomePageView: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
-                if let balance = piggyBankUser.activeUser?.accounts.first?.balanceInUsd() ?? Optional<Double>(0.00) {
+                if let balance = piggyBankUser.activeUser?.accounts.first?.balanceInUsd() ?? noBalance {
                     Text(String(format: "$%0.02f", balance))
                         .font(.custom(appFont, size: 40.0, relativeTo: .title))
                         .fontWeight(.bold)
@@ -42,19 +43,7 @@ struct HomePageView: View {
                 }
             }
             .onAppear {
-                Task {
-                    if let authToken = piggyBankUser.authToken {
-                        try await piggyBankUser.createUser(authToken: authToken)
-                        if let user = piggyBankUser.activeUser {
-                            if user.accounts.isEmpty {
-                                noAccounts = true
-                            } else {
-                                noAccounts = false
-                                displayEmptyTextView = false
-                            }
-                        }
-                    }
-                }
+                displayAccountExistence()
             }
             .navigationTitle("Piggybanks")
             .navigationBarTitleDisplayMode(.inline)
@@ -76,6 +65,23 @@ struct HomePageView: View {
             .preferredColorScheme(.light)
             .background(Color(appBackgroundColor))
             .navigationBarBackButtonHidden(true)
+        }
+
+    }
+    
+    func displayAccountExistence() {
+        Task {
+            if let authToken = piggyBankUser.authToken {
+                try await piggyBankUser.createUser(authToken: authToken)
+                if let user = piggyBankUser.activeUser {
+                    if user.accounts.isEmpty {
+                        noAccounts = true
+                    } else {
+                        noAccounts = false
+                        displayEmptyTextView = false
+                    }
+                }
+            }
         }
     }
 }

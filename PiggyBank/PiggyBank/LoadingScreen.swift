@@ -22,12 +22,7 @@ struct LoadingScreen: View {
                 }
             }
             .onAppear {
-                piggyBankUser.loadAuthTokenTimeFromDisk()
-                loadingHomePage = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + piggyBankUser.authTokenTime) {
-                    loadingHomePage = false
-                    goToHomePage = true
-                }
+                loadHomePage()
             }
             .navigationDestination(isPresented: $goToHomePage) {
                 HomePageView()
@@ -39,6 +34,15 @@ struct LoadingScreen: View {
             .background(Color(appBackgroundColor))
             //Set the app's color scheme to light mode as default to prevent black text from turning white when a user enables dark mode.
             .preferredColorScheme(.light)
+        }
+    }
+    
+    func loadHomePage() {
+        piggyBankUser.loadAuthTokenTimeFromDisk()
+        loadingHomePage = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + piggyBankUser.authTokenTime) {
+            loadingHomePage = false
+            goToHomePage = true
         }
     }
     

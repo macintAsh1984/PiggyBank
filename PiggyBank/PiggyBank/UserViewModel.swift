@@ -84,9 +84,10 @@ import SwiftUI
     func loadUserName() {
         if let existingUserName = self.activeUser?.accounts.first?.name {
             if !existingUserName.isEmpty {
-                self.name = self.activeUser?.name ?? ""
+                self.name = existingUserName
             }
         } else {
+            self.name = UserDefaults.standard.string(forKey: "name") ?? ""
             print(loadUserNameError.message)
         }
     }

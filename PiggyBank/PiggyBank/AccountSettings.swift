@@ -15,16 +15,8 @@ struct AccountSettings: View {
     var body: some View {
         NavigationStack {
             VStack {
-                TextField("Username", text: $piggyBankUser.name)
-                    .padding(.all)
-                    .focused($keyboardFocus)
-                    .background(.white)
-                    .cornerRadius(roundedCornerRadius)
-                TextField("", text: $piggyBankUser.phoneNumber)
-                    .padding(.all)
-                    .focused($keyboardFocus)
-                    .background(.white)
-                    .cornerRadius(roundedCornerRadius)
+                AccountInfoView(username: username, keyboardFocus: $keyboardFocus)
+                    .environmentObject(piggyBankUser)
                 Spacer()
                     .frame(height: 20)
                 LogoutButtonView(keyboardFocus: $keyboardFocus)
@@ -60,6 +52,25 @@ struct AccountSettings: View {
                 piggyBankUser.loadPhoneNumber()
             }
         }
+    }
+}
+
+struct AccountInfoView: View {
+    @State var username: String
+    @FocusState.Binding var keyboardFocus: Bool
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    
+    var body: some View {
+        TextField("Username", text: $piggyBankUser.name)
+            .padding(.all)
+            .focused($keyboardFocus)
+            .background(.white)
+            .cornerRadius(roundedCornerRadius)
+        TextField("", text: $piggyBankUser.phoneNumber)
+            .padding(.all)
+            .focused($keyboardFocus)
+            .background(.white)
+            .cornerRadius(roundedCornerRadius)
     }
 }
 
