@@ -10,6 +10,8 @@ import SwiftUI
 struct HomePageView: View {
     @State var noAccounts = false
     @State var displayEmptyTextView = true
+    @State var navigateToProfileSettings = false
+    @State var addAccountSheet = false
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     let noBalance: Double? = 0.00
     
@@ -58,9 +60,28 @@ struct HomePageView: View {
             .toolbarColorScheme(.light)
             .toolbar {
                 ToolbarItem {
-                    NavigationLink {
-                        AccountSettings()
-                            .environmentObject(piggyBankUser)
+                    Menu() {
+                        Button(action: {
+                            // Bring up sheet to add new account.
+                            addAccountSheet.toggle()
+                        }) {
+                          Label("Add Account", systemImage: "plus")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                        }
+                        
+                        Button(action: {
+                            // Go to the Profile Settings on click.
+                            navigateToProfileSettings.toggle()
+                        }) {
+                          Label("Profile Settings", systemImage: "person.crop.circle.fill")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                        }
                         
                     } label: {
                         Image(systemName: "gear")
@@ -71,9 +92,20 @@ struct HomePageView: View {
             .preferredColorScheme(.light)
             .background(Color(appBackgroundColor))
             .navigationBarBackButtonHidden(true)
+            .sheet(isPresented: $addAccountSheet) {
+                AddAccountSheet()
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
+                    .background(Color(appBackgroundColor))
+            }
+            .navigationDestination(isPresented: $navigateToProfileSettings) {
+                AccountSettings()
+                    .environmentObject(piggyBankUser)
+            }
         }
 
     }
+    
+    func addAccount() {}
     
     /* Create a user and determine if that user has any active accounts to
      toggle the appropriate booleans that show the apprioriate text indicating account existence.*/
@@ -91,5 +123,27 @@ struct HomePageView: View {
                 }
             }
         }
+    }
+}
+
+struct AddAccountSheet: View {
+    @State var accountName = ""
+    var body: some View {
+        TextField("Account Name", text: $accountName)
+            .frame(width: 375)
+            .padding(.all)
+            .background(.white)
+            .cornerRadius(roundedCornerRadius)
+        Spacer()
+            .frame(height: 20)
+        Button("Create Account") {
+            //Button press action
+        }
+            .font(.custom(appFont, size: 18.0))
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.all)
+            .background(Color(buttonBackgroundColor))
+            .cornerRadius(roundedCornerRadius)
     }
 }
