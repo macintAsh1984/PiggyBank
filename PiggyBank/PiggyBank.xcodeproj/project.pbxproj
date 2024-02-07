@@ -22,6 +22,7 @@
 		ABD9467E2B5534FD0087A507 /* Get Commercial License.url in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467B2B5534FD0087A507 /* Get Commercial License.url */; };
 		ABD9467F2B5534FD0087A507 /* FSLA_NonCommercial_License.html in Resources */ = {isa = PBXBuildFile; fileRef = ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */; };
 		ABE3CBB82B6D782B0033D594 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE3CBB72B6D782B0033D594 /* RootView.swift */; };
+		ABF125302B741A1D004FE91F /* AccountDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1252F2B741A1D004FE91F /* AccountDetails.swift */; };
 		ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF4E4362B60BC8700A7D5FD /* Api.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		ABD9467C2B5534FD0087A507 /* FSLA_NonCommercial_License.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FSLA_NonCommercial_License.html; sourceTree = "<group>"; };
 		ABD946802B55374D0087A507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		ABE3CBB72B6D782B0033D594 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		ABF1252F2B741A1D004FE91F /* AccountDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetails.swift; sourceTree = "<group>"; };
 		ABF4E4362B60BC8700A7D5FD /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +84,7 @@
 				ABA0A5012B51DC2F00A8B7BA /* PiggyBankApp.swift */,
 				AB3435EC2B56F3EE001D4B4A /* SplashScreen.swift */,
 				ABE3CBB72B6D782B0033D594 /* RootView.swift */,
+				ABF1252F2B741A1D004FE91F /* AccountDetails.swift */,
 				ABA0A5032B51DC2F00A8B7BA /* LoginView.swift */,
 				AB6CA9802B5D034600C445F6 /* VerificationView.swift */,
 				AB6F9FB12B67374F003E7426 /* AccountSettings.swift */,
@@ -197,6 +200,7 @@
 				ABA0A5022B51DC2F00A8B7BA /* PiggyBankApp.swift in Sources */,
 				ABE3CBB82B6D782B0033D594 /* RootView.swift in Sources */,
 				ABF4E4372B60BC8700A7D5FD /* Api.swift in Sources */,
+				ABF125302B741A1D004FE91F /* AccountDetails.swift in Sources */,
 				AB6F9FB22B67374F003E7426 /* AccountSettings.swift in Sources */,
 				AB48CECA2B60E7D400FA6702 /* HomePageView.swift in Sources */,
 				AB6CA9812B5D034600C445F6 /* VerificationView.swift in Sources */,
