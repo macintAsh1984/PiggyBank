@@ -94,7 +94,8 @@ struct HomePageView: View {
             .background(Color(appBackgroundColor))
             .navigationBarBackButtonHidden(true)
             .sheet(isPresented: $addAccountSheet) {
-                AddAccountSheet()
+                AddAccountSheet(addAccountSheet: $addAccountSheet)
+                    .environmentObject(piggyBankUser)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
                     .background(Color(appBackgroundColor))
             }
@@ -105,8 +106,6 @@ struct HomePageView: View {
         }
 
     }
-    
-    func addAccount() {}
     
     /* Create a user and determine if that user has any active accounts to
      toggle the appropriate booleans that show the apprioriate text indicating account existence.*/
@@ -129,6 +128,10 @@ struct HomePageView: View {
 
 struct AddAccountSheet: View {
     @State var accountName = ""
+    @Binding var addAccountSheet: Bool
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         TextField("Account Name", text: $accountName)
             .frame(width: 375)
@@ -138,7 +141,10 @@ struct AddAccountSheet: View {
         Spacer()
             .frame(height: 20)
         Button("Create Account") {
-            //Button press action
+            Task {
+                try await piggyBankUser.createNewAccount(accountName:accountName)
+            }
+            dismiss()
         }
             .font(.custom(appFont, size: 18.0))
             .fontWeight(.semibold)
