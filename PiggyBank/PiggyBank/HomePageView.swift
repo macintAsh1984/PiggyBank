@@ -11,6 +11,7 @@ struct HomePageView: View {
     @State var noAccounts = false
     @State var displayEmptyTextView = true
     @State var navigateToProfileSettings = false
+    @State var navigateToAccountDetails = false
     @State var addAccountSheet = false
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     let noBalance: Double? = 0.00
@@ -32,23 +33,26 @@ struct HomePageView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
                 }
-                /* Determine whether to display the appropriate method for displaying
-                whether a user has an existing account.*/
-                switch (noAccounts, displayEmptyTextView) {
-                    case (true, _):
-                    //If no accounts exist, regardless of displayEmptyTextView's value, display 'No accounts created'."
-                        Text("No accounts created")
-                            .font(.custom(appFont, size: 20.0, relativeTo: .title))
-                            .fontWeight(.bold)
-                    // If an account exists, display '$$$' to signify an existing account."
-                    case (false, false):
-                        Text("$$$")
-                            .font(.custom(appFont, size: 20.0, relativeTo: .title))
-                            .fontWeight(.bold)
-                    // Show no text as a default option before determining if an account exists.
-                    case (false, true):
-                        Text("")
+                
+                Form {
+                    Section {
+                        if let numAccounts = piggyBankUser.activeUser?.accounts.count {
+                            ForEach(0..<numAccounts, id: \.self) { index in
+                                var accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                                Picker(accountName, selection: $navigateToAccountDetails) {
+                                    if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
+                                        Text("\(balance)").tag(index)
+                                    }
+                                }
+                                .pickerStyle(.navigationLink)
+                            }
+                        }
+                    }
                 }
+                .background(Color(appBackgroundColor))
+                .scrollContentBackground(.hidden)
+                
+                
             }
             .onAppear {
                 displayAccountExistence()
@@ -65,22 +69,22 @@ struct HomePageView: View {
                             // Bring up sheet to add new account.
                             addAccountSheet.toggle()
                         }) {
-                          Label("Add Account", systemImage: "plus")
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.blue)
-                            .cornerRadius(10)
+                            Label("Add Account", systemImage: "plus")
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.blue)
+                                .cornerRadius(10)
                         }
                         
                         Button(action: {
                             // Go to the Profile Settings on click.
                             navigateToProfileSettings.toggle()
                         }) {
-                          Label("Profile Settings", systemImage: "person.crop.circle.fill")
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.blue)
-                            .cornerRadius(10)
+                            Label("Profile Settings", systemImage: "person.crop.circle.fill")
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.blue)
+                                .cornerRadius(10)
                         }
                         
                     } label: {
