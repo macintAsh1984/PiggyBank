@@ -132,17 +132,28 @@ import SwiftUI
         self.authTokenTime = authTokenTime
     }
     
-    // Function That Related To User Logout
-    func logOut() {
-        /* Remove the user's authentication token, username, and phoneNumber
-        from disk and set all view model attributes to empty strings or nil.*/
-        UserDefaults.standard.removeObject(forKey: "authToken")
-        UserDefaults.standard.removeObject(forKey: "name")
-        UserDefaults.standard.removeObject(forKey: "phoneNumber")
-        self.name = String()
-        self.phoneNumber = String()
-        self.authToken = nil
-        self.activeUser = nil
+    func calculateTotalAssets() -> Double {
+        var totalAssets :Double = 0
+        if let numAccounts = self.activeUser?.accounts.count {
+            for index in 0..<numAccounts {
+                if let accountBalance = self.activeUser?.accounts[index].balance{
+                    totalAssets += Double(accountBalance)
+                }
+            }
+        }
+        return totalAssets
     }
-    
+        
+        // Function That Related To User Logout
+        func logOut() {
+            /* Remove the user's authentication token, username, and phoneNumber
+             from disk and set all view model attributes to empty strings or nil.*/
+            UserDefaults.standard.removeObject(forKey: "authToken")
+            UserDefaults.standard.removeObject(forKey: "name")
+            UserDefaults.standard.removeObject(forKey: "phoneNumber")
+            self.name = String()
+            self.phoneNumber = String()
+            self.authToken = nil
+            self.activeUser = nil
+        }
 }

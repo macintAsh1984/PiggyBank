@@ -15,6 +15,7 @@ struct HomePageView: View {
     @State var addAccountSheet = false
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     let noBalance: Double? = 0.00
+    @State var totalAssets: Double = 0.00
     
     var body: some View {
         NavigationStack {
@@ -26,19 +27,16 @@ struct HomePageView: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
                 // Display the user's account balance or $0.00 if no account has been created.
-                if let balance = piggyBankUser.activeUser?.accounts.first?.balanceInUsd() ?? noBalance {
-                    Text(String(format: "$%0.02f", balance))
-                        .font(.custom(appFont, size: 40.0, relativeTo: .title))
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.black)
-                }
-                
+                Text(String(format: "$%0.02f", totalAssets))
+                    .font(.custom(appFont, size: 40.0, relativeTo: .title))
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.black)
                 Form {
                     Section {
                         if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                             ForEach(0..<numAccounts, id: \.self) { index in
-                                var accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                                let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
                                 Picker(accountName, selection: $navigateToAccountDetails) {
                                     if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
                                         Text("\(balance)").tag(index)
@@ -51,10 +49,9 @@ struct HomePageView: View {
                 }
                 .background(Color(appBackgroundColor))
                 .scrollContentBackground(.hidden)
-                
-                
             }
             .onAppear {
+                totalAssets = piggyBankUser.calculateTotalAssets()
                 displayAccountExistence()
             }
             .navigationTitle("Piggybanks")
