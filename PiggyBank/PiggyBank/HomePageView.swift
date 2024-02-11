@@ -37,12 +37,9 @@ struct HomePageView: View {
                         if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                             ForEach(0..<numAccounts, id: \.self) { index in
                                 let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
-                                Picker(accountName, selection: $navigateToAccountDetails) {
-                                    if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
-                                        Text("\(balance)").tag(index)
-                                    }
+                                NavigationLink(destination: AccountDetails(index: index)) {
+                                    Text(piggyBankUser.activeUser?.accounts[index].name ?? "")
                                 }
-                                .pickerStyle(.navigationLink)
                             }
                         }
                     }
@@ -154,3 +151,4 @@ struct AddAccountSheet: View {
             .cornerRadius(roundedCornerRadius)
     }
 }
+

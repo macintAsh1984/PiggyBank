@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "2D8352D5-1208-4037-9121-37CB3DED3793"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93FA2539-6045-4828-9E7D-C51F0DE21CDE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PiggyBank/AccountDetails.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "93FA2539-6045-4828-9E7D-C51F0DE21CDE - 98ec657818da8881"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PiggyBank.TransferSheet.body.getter : some"
+                  moduleName = "PiggyBank"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shubhadamartha/PiggyBank/PiggyBank/PiggyBank/AccountDetails.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "1908">
+               </Location>
+               <Location
+                  uuid = "93FA2539-6045-4828-9E7D-C51F0DE21CDE - 98ec657818da88e0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PiggyBank.TransferSheet.body.getter : some"
+                  moduleName = "PiggyBank"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shubhadamartha/PiggyBank/PiggyBank/PiggyBank/AccountDetails.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "1908">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

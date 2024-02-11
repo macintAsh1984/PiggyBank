@@ -11,16 +11,20 @@ struct AccountDetails: View {
     @State var showDepositSheet = false
     @State var showWithdrawSheet = false
     @State var showTransferSheet = false
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    @State var index: Int
     
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Account Name")
+                let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                Text("Account: \(accountName)")
                     .font(.custom(appFont, size: 40.0, relativeTo: .title2))
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
-                Text("$Money Amount Goes Here")
+                let accountPrice = piggyBankUser.activeUser?.accounts[index].balance ?? 0
+                Text("$\(accountPrice)")
                     .font(.custom(appFont, size: 25.0, relativeTo: .title2))
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
@@ -136,7 +140,12 @@ struct WithdrawSheet: View {
 
 struct TransferSheet: View {
     @State var transferAmount = ""
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    @State var navigateToAccountDetails = false
+    
     var body: some View {
+        Spacer()
+            .frame(height: 20)
         TextField("Transfer Amount", text: $transferAmount)
             .frame(width: 300)
             .padding(.all)
@@ -156,6 +165,25 @@ struct TransferSheet: View {
             .padding(.all)
             .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
+        
+        Form {
+            Section {
+                if let numAccounts = piggyBankUser.activeUser?.accounts.count {
+                    ForEach(0..<numAccounts, id: \.self) { index in
+                        let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                            Picker(accountName, selection: $navigateToAccountDetails) {
+                                if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
+                                    Text("\(balance)").tag(index)
+
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                    }
+                }
+            }
+        }
+        .background(Color(appBackgroundColor))
+        .scrollContentBackground(.hidden)
     }
 }
 
@@ -163,6 +191,6 @@ struct TransferSheet: View {
 
 
 
-#Preview {
-    AccountDetails()
-}
+//#Preview {
+//    AccountDetails()
+//}
