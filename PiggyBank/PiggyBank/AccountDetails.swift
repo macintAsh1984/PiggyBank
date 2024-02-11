@@ -183,31 +183,18 @@ struct TransferSheet: View {
         
         Form {
             Section {
-                
-                /*
                 if let numAccounts = piggyBankUser.activeUser?.accounts.count {
-                    ForEach(0..<numAccounts, id: \.self) { i in
-                        if(i != index){
-                            let accountName = piggyBankUser.activeUser?.accounts[i].name ?? ""
-                            
-                            Button(action: {
-                                Task{
-                                    if let sendAcc = piggyBankUser.activeUser?.accounts[i]{
-                                        if let currAcc = piggyBankUser.activeUser?.accounts[index]{
-                                            let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
-                                            
-                                            piggyBankUser.activeUser = apiResp.user
-                                        }
-                                    }
-                                }
-                            }, label: {
-                                Text("Transfer Amount to: \(accountName)")
-                            })
-                        }
+                    ForEach(0..<numAccounts, id: \.self) { index in
+                        let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                            Picker(accountName, selection: $navigateToAccountDetails) {
+                                if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
+                                    Text("\(balance)").tag(index)
 
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
                     }
                 }
-                */
             }
         }
         .background(Color(appBackgroundColor))
