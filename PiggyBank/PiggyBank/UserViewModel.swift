@@ -32,6 +32,7 @@ import SwiftUI
     let unknownError = ApiError(errorCode: "unknown_error", message: "An unexpected error occured")
     
     // Setter Functions
+        
     func setVerificationCode(_ to: String) {
         self.verificationCode = to
     }
@@ -149,16 +150,16 @@ import SwiftUI
 //        self.activeUser?.accounts.append(userResponse.user?.accounts.last)
     }
         
-        // Function That Related To User Logout
-        func logOut() {
-            /* Remove the user's authentication token, username, and phoneNumber
-             from disk and set all view model attributes to empty strings or nil.*/
-            UserDefaults.standard.removeObject(forKey: "authToken")
-            UserDefaults.standard.removeObject(forKey: "name")
-            UserDefaults.standard.removeObject(forKey: "phoneNumber")
-            self.name = String()
-            self.phoneNumber = String()
-            self.authToken = nil
-            self.activeUser = nil
-        }
+    // Function That Related To User Logout
+    func logOut() {
+        /* Remove the user's authentication token, username, and phoneNumber
+         from disk and set all view model attributes to empty strings or nil.*/
+        UserDefaults.standard.removeObject(forKey: "authToken")
+        UserDefaults.standard.removeObject(forKey: "name")
+        UserDefaults.standard.removeObject(forKey: "phoneNumber")
+        self.name = String()
+        self.phoneNumber = String()
+        self.authToken = nil
+        self.activeUser = nil
+    }
 }

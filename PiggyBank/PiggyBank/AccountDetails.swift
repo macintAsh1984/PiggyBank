@@ -74,17 +74,17 @@ struct AccountDetails: View {
             .preferredColorScheme(.light)
             .background(Color(appBackgroundColor))
             .sheet(isPresented: $showDepositSheet) {
-                DepositSheet()
+                DepositSheet(index: index)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
                     .background(Color(appBackgroundColor))
             }
             .sheet(isPresented: $showWithdrawSheet) {
-                WithdrawSheet()
+                WithdrawSheet(index: index)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
                     .background(Color(appBackgroundColor))
             }
             .sheet(isPresented: $showTransferSheet) {
-                TransferSheet()
+                TransferSheet(index: index)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
                     .background(Color(appBackgroundColor))
             }
@@ -95,7 +95,10 @@ struct AccountDetails: View {
 }
 
 struct DepositSheet: View {
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
     @State var depositAmount = ""
+    @State var index: Int
+
     var body: some View {
         TextField("Deposit Amount", text: $depositAmount)
             .frame(width: 300)
@@ -106,6 +109,15 @@ struct DepositSheet: View {
             .frame(height: 20)
         Button("Deposit") {
             //Button press action
+            if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                Task{
+                    let apiResp = try await Api.shared.deposit(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(depositAmount) ?? 0)
+                    
+                    piggyBankUser.activeUser = apiResp.user
+
+                }
+            }
+            
         }
             .font(.custom(appFont, size: 18.0))
             .fontWeight(.semibold)
@@ -118,6 +130,9 @@ struct DepositSheet: View {
 
 struct WithdrawSheet: View {
     @State var withdrawAmount = ""
+    @EnvironmentObject var piggyBankUser: PiggyBankUser
+    @State var index: Int
+    
     var body: some View {
         TextField("Withdraw Amount", text: $withdrawAmount)
             .frame(width: 300)
@@ -128,6 +143,15 @@ struct WithdrawSheet: View {
             .frame(height: 20)
         Button("Withdraw") {
             //Button press action
+            if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                Task{
+                    let apiResp = try await Api.shared.withdraw(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(withdrawAmount) ?? 0)
+                    
+                    piggyBankUser.activeUser = apiResp.user
+
+                }
+            }
+            
         }
             .font(.custom(appFont, size: 18.0))
             .fontWeight(.semibold)
@@ -137,11 +161,12 @@ struct WithdrawSheet: View {
             .cornerRadius(roundedCornerRadius)
     }
 }
-
 struct TransferSheet: View {
     @State var transferAmount = ""
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     @State var navigateToAccountDetails = false
+    
+    @State var index: Int //to keep track of the current index we are at so this will be the default transfer *FROM* account and we will be clicking for transfer *TO*
     
     var body: some View {
         Spacer()
@@ -156,38 +181,39 @@ struct TransferSheet: View {
         
         //Add UI for Sheet with accounts
         
-        Button("Transfer") {
-            //Button press action
-        }
-            .font(.custom(appFont, size: 18.0))
-            .fontWeight(.semibold)
-            .foregroundColor(.white)
-            .padding(.all)
-            .background(Color(buttonBackgroundColor))
-            .cornerRadius(roundedCornerRadius)
-        
         Form {
             Section {
+                
+                /*
                 if let numAccounts = piggyBankUser.activeUser?.accounts.count {
-                    ForEach(0..<numAccounts, id: \.self) { index in
-                        let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
-                            Picker(accountName, selection: $navigateToAccountDetails) {
-                                if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
-                                    Text("\(balance)").tag(index)
-
+                    ForEach(0..<numAccounts, id: \.self) { i in
+                        if(i != index){
+                            let accountName = piggyBankUser.activeUser?.accounts[i].name ?? ""
+                            
+                            Button(action: {
+                                Task{
+                                    if let sendAcc = piggyBankUser.activeUser?.accounts[i]{
+                                        if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                                            let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
+                                            
+                                            piggyBankUser.activeUser = apiResp.user
+                                        }
+                                    }
                                 }
-                            }
-                            .pickerStyle(.navigationLink)
+                            }, label: {
+                                Text("Transfer Amount to: \(accountName)")
+                            })
+                        }
+
                     }
                 }
+                */
             }
         }
         .background(Color(appBackgroundColor))
         .scrollContentBackground(.hidden)
     }
 }
-
-
 
 
 
