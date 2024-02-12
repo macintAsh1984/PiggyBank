@@ -148,6 +148,15 @@ import SwiftUI
         guard let userResponse = try? await Api.shared.createAccount(authToken: self.authToken ?? "", name: accountName) else {throw unknownError}
 //        self.activeUser?.accounts.append(userResponse.user?.accounts.last)
     }
+    
+    
+    
+    
+    func DeleteAccount(accountName: Account) async throws {
+        guard let userResponse = try? await Api.shared.deleteAccount(authToken: self.authToken ?? "", account: accountName) else {throw unknownError}
+//        self.activeUser?.accounts.append(userResponse.user?.accounts.last)
+    }
+
         
         // Function That Related To User Logout
         func logOut() {

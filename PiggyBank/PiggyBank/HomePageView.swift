@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomePageView: View {
     @State var noAccounts = false
@@ -13,7 +14,10 @@ struct HomePageView: View {
     @State var navigateToProfileSettings = false
     @State var navigateToAccountDetails = false
     @State var addAccountSheet = false
+    @State var updatetoshowaccount = false //get rid of this later
     @EnvironmentObject var piggyBankUser: PiggyBankUser
+    
+    
     let noBalance: Double? = 0.00
     @State var totalAssets: Double = 0.00
     
@@ -36,7 +40,7 @@ struct HomePageView: View {
                     Section {
                         if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                             ForEach(0..<numAccounts, id: \.self) { index in
-                                let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                                let accountName = piggyBankUser.activeUser?.accounts[index].name ?? "" //this code allows you to choose the account 
                                 NavigationLink(destination: AccountDetails(index: index)) {
                                     Text(piggyBankUser.activeUser?.accounts[index].name ?? "")
                                 }
@@ -50,6 +54,9 @@ struct HomePageView: View {
             .onAppear {
                 totalAssets = piggyBankUser.calculateTotalAssets()
                 displayAccountExistence()
+
+                
+                
             }
             .navigationTitle("Piggybanks")
             .navigationBarTitleDisplayMode(.inline)
@@ -100,6 +107,7 @@ struct HomePageView: View {
                 AccountSettings()
                     .environmentObject(piggyBankUser)
             }
+           
         }
 
     }
@@ -128,27 +136,39 @@ struct AddAccountSheet: View {
     @Binding var addAccountSheet: Bool
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     @Environment(\.dismiss) private var dismiss
+    @State var UpdatePreviousView = false
     
     var body: some View {
-        TextField("Account Name", text: $accountName)
-            .frame(width: 375)
-            .padding(.all)
-            .background(.white)
-            .cornerRadius(roundedCornerRadius)
-        Spacer()
-            .frame(height: 20)
-        Button("Create Account") {
-            Task {
-                try await piggyBankUser.createNewAccount(accountName:accountName)
+       
+            TextField("Account Name", text: $accountName)
+                .frame(width: 375)
+                .padding(.all)
+                .background(.white)
+                .cornerRadius(roundedCornerRadius)
+            Spacer()
+                .frame(height: 20)
+            Button("Create Account") {
+                Task {
+                    try await piggyBankUser.createNewAccount(accountName:accountName)
+                    HomePageView().environmentObject(piggyBankUser)
+                    
+                    
+                }
+                dismiss()
             }
-            dismiss()
-        }
             .font(.custom(appFont, size: 18.0))
             .fontWeight(.semibold)
             .foregroundColor(.white)
             .padding(.all)
             .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
+            
+            
+            
+            
+            
+            
+        
     }
 }
 
