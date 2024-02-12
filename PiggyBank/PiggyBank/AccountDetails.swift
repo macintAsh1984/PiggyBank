@@ -132,6 +132,7 @@ struct WithdrawSheet: View {
     @State var withdrawAmount = ""
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     @State var index: Int
+    @State var invalidWithdrawAmt = false
     
     var body: some View {
         TextField("Withdraw Amount", text: $withdrawAmount)
@@ -143,12 +144,20 @@ struct WithdrawSheet: View {
             .frame(height: 20)
         Button("Withdraw") {
             //Button press action
+            
+            
             if let currAcc = piggyBankUser.activeUser?.accounts[index]{
-                Task{
-                    let apiResp = try await Api.shared.withdraw(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(withdrawAmount) ?? 0)
-                    
-                    piggyBankUser.activeUser = apiResp.user
+                if(currAcc.balance < (Int(withdrawAmount) ?? 0)){
+                    print("hello")
+                    invalidWithdrawAmt = true
+                }
+                else{
+                    Task{
+                        let apiResp = try await Api.shared.withdraw(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(withdrawAmount) ?? 0)
+                        
+                        piggyBankUser.activeUser = apiResp.user
 
+                    }
                 }
             }
             
@@ -159,6 +168,9 @@ struct WithdrawSheet: View {
             .padding(.all)
             .background(Color(buttonBackgroundColor))
             .cornerRadius(roundedCornerRadius)
+            .alert("Attempting to Withdraw Too Much", isPresented: $invalidWithdrawAmt) {
+                    Button("Dismiss", role: .cancel) { }
+                }
     }
 }
 struct TransferSheet: View {
@@ -167,6 +179,7 @@ struct TransferSheet: View {
     @State var navigateToAccountDetails = false
     
     @State var index: Int //to keep track of the current index we are at so this will be the default transfer *FROM* account and we will be clicking for transfer *TO*
+    @State var transferError: Bool  = false
     
     var body: some View {
         Spacer()
@@ -184,7 +197,6 @@ struct TransferSheet: View {
         Form {
             Section {
                 
-                /*
                 if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                     ForEach(0..<numAccounts, id: \.self) { i in
                         if(i != index){
@@ -194,20 +206,35 @@ struct TransferSheet: View {
                                 Task{
                                     if let sendAcc = piggyBankUser.activeUser?.accounts[i]{
                                         if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                                            
+                                            if(currAcc.balance < (Int(transferAmount) ?? 0)){
+                                                print("hello")
+                                                transferError = true
+                                            }
+                                            else{
+                                                let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
+                                                
+                                                piggyBankUser.activeUser = apiResp.user
+                                            }
+                                            /*
                                             let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
                                             
                                             piggyBankUser.activeUser = apiResp.user
+                                             */
                                         }
                                     }
                                 }
                             }, label: {
                                 Text("Transfer Amount to: \(accountName)")
                             })
+                            .alert("Transfer Amount is Too Large", isPresented: $transferError) {
+                                    Button("Dismiss", role: .cancel) { }
+                                }
                         }
 
                     }
                 }
-                */
+                
             }
         }
         .background(Color(appBackgroundColor))
