@@ -37,8 +37,11 @@ struct HomePageView: View {
                         if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                             ForEach(0..<numAccounts, id: \.self) { index in
                                 let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                                let balanceString = piggyBankUser.activeUser?.accounts[index].balanceString() ?? ""
                                 NavigationLink(destination: AccountDetails(index: index)) {
-                                    Text(piggyBankUser.activeUser?.accounts[index].name ?? "")
+                                    Text(accountName)
+                                    Text(balanceString)
+                                        .multilineTextAlignment(.trailing)
                                 }
                             }
                         }

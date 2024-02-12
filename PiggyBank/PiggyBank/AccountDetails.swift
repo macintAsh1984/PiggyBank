@@ -238,7 +238,7 @@ struct TransferSheet: View {
             }
         }
         .background(Color(appBackgroundColor))
-        .scrollContentBackground(.hidden)
+        .scrollContentBackground(.hidden
     }
 }
 
