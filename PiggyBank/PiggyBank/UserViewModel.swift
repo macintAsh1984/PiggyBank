@@ -134,7 +134,7 @@ import SwiftUI
     }
     
     func calculateTotalAssets() -> Double {
-        var totalAssets :Double = 0
+        var totalAssets: Double = 0
         if let numAccounts = self.activeUser?.accounts.count {
             for index in 0..<numAccounts {
                 if let accountBalance = self.activeUser?.accounts[index].balance{
@@ -147,7 +147,10 @@ import SwiftUI
     
     func createNewAccount(accountName: String) async throws {
         guard let userResponse = try? await Api.shared.createAccount(authToken: self.authToken ?? "", name: accountName) else {throw unknownError}
-//        self.activeUser?.accounts.append(userResponse.user?.accounts.last)
+    }
+    
+    func deleteAccount(accountName: Account) async throws {
+        guard let userResponse = try? await Api.shared.deleteAccount(authToken: self.authToken ?? "", account: accountName) else {throw unknownError}
     }
         
     // Function That Related To User Logout

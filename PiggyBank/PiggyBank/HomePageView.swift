@@ -27,7 +27,7 @@ struct HomePageView: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
                 // Display the user's account balance or $0.00 if no account has been created.
-                Text(String(format: "$%0.02f", totalAssets))
+                Text(String(totalAssets) + "0")
                     .font(.custom(appFont, size: 40.0, relativeTo: .title))
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
@@ -37,11 +37,9 @@ struct HomePageView: View {
                         if let numAccounts = piggyBankUser.activeUser?.accounts.count {
                             ForEach(0..<numAccounts, id: \.self) { index in
                                 let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
-                                let balanceString = piggyBankUser.activeUser?.accounts[index].balanceString() ?? ""
+                                //let balanceString = piggyBankUser.activeUser?.accounts[index].balanceString() ?? ""
                                 NavigationLink(destination: AccountDetails(index: index)) {
                                     Text(accountName)
-                                    Text(balanceString)
-                                        .multilineTextAlignment(.trailing)
                                 }
                             }
                         }

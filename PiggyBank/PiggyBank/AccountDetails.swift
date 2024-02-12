@@ -11,6 +11,9 @@ struct AccountDetails: View {
     @State var showDepositSheet = false
     @State var showWithdrawSheet = false
     @State var showTransferSheet = false
+    @State var accountName: Account?
+    @State var navigatetoHome = false
+    @State var accountPrice: Double = 0.00
     @EnvironmentObject var piggyBankUser: PiggyBankUser
     @State var index: Int
     
@@ -45,14 +48,12 @@ struct AccountDetails: View {
                         }
                         
                         Button() {
-                            //action
                             showWithdrawSheet.toggle()
                         } label: {
                             Label("Withdraw", systemImage: "minus.circle")
                         }
                         
                         Button() {
-                            //action
                             showTransferSheet.toggle()
                         } label: {
                             Label("Transfer", systemImage: "arrowshape.turn.up.right")
@@ -61,8 +62,24 @@ struct AccountDetails: View {
                         Divider()
                         
                         Button(role: .destructive) {
+                            if let account = accountName {
+                                Task {
+                                    do {
+                                        try await piggyBankUser.deleteAccount(accountName: account)
+                                        navigatetoHome = true
+                                        
+                                    } catch {
+                                        print ("Error deleting")
+                                    }
+                                }
+                            } else {
+                                print("Error: Account is nil")
+                            }
+                           
                         } label: {
                             Label("Delete Account", systemImage: "trash")
+                            
+                            
                         }
                         
                     } label: {
@@ -84,9 +101,25 @@ struct AccountDetails: View {
                     .background(Color(appBackgroundColor))
             }
             .sheet(isPresented: $showTransferSheet) {
-                TransferSheet(index: index)
+                TransferSheet(currentIndexofthecurrentuser: index, theamounttopass: accountPrice)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity, maxHeight: .infinity/*@END_MENU_TOKEN@*/)
                     .background(Color(appBackgroundColor))
+            }
+            .navigationDestination(isPresented: $navigatetoHome) {
+                HomePageView().environmentObject(piggyBankUser)
+            }
+            .onAppear {
+                accountPrice = piggyBankUser.activeUser?.accounts[index].balanceInUsd() ?? 0.00
+                
+                Task {
+                    do {
+                        let bruh = try await Api.shared.user(authToken: piggyBankUser.authToken ?? "").user.accounts[index]
+                        accountName = bruh
+                    } catch {
+                        print("error retreiving account")
+                    }
+                                    
+                }
             }
 
             
@@ -108,7 +141,6 @@ struct DepositSheet: View {
         Spacer()
             .frame(height: 20)
         Button("Deposit") {
-            //Button press action
             if let currAcc = piggyBankUser.activeUser?.accounts[index]{
                 Task{
                     let apiResp = try await Api.shared.deposit(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(depositAmount) ?? 0)
@@ -143,16 +175,11 @@ struct WithdrawSheet: View {
         Spacer()
             .frame(height: 20)
         Button("Withdraw") {
-            //Button press action
-            
-            
             if let currAcc = piggyBankUser.activeUser?.accounts[index]{
-                if(currAcc.balance < (Int(withdrawAmount) ?? 0)){
-                    print("hello")
+                if (currAcc.balance < (Int(withdrawAmount) ?? 0)) {
                     invalidWithdrawAmt = true
-                }
-                else{
-                    Task{
+                } else {
+                    Task {
                         let apiResp = try await Api.shared.withdraw(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(withdrawAmount) ?? 0)
                         
                         piggyBankUser.activeUser = apiResp.user
@@ -173,77 +200,105 @@ struct WithdrawSheet: View {
                 }
     }
 }
-struct TransferSheet: View {
-    @State var transferAmount = ""
-    @EnvironmentObject var piggyBankUser: PiggyBankUser
-    @State var navigateToAccountDetails = false
-    
-    @State var index: Int //to keep track of the current index we are at so this will be the default transfer *FROM* account and we will be clicking for transfer *TO*
-    @State var transferError: Bool  = false
-    
-    var body: some View {
-        Spacer()
-            .frame(height: 20)
-        TextField("Transfer Amount", text: $transferAmount)
-            .frame(width: 300)
-            .padding(.all)
-            .background(.white)
-            .cornerRadius(roundedCornerRadius)
-        Spacer()
-            .frame(height: 20)
-        
-        //Add UI for Sheet with accounts
-        
-        Form {
-            Section {
-                
-                if let numAccounts = piggyBankUser.activeUser?.accounts.count {
-                    ForEach(0..<numAccounts, id: \.self) { i in
-                        if(i != index){
-                            let accountName = piggyBankUser.activeUser?.accounts[i].name ?? ""
-                            
-                            Button(action: {
-                                Task{
-                                    if let sendAcc = piggyBankUser.activeUser?.accounts[i]{
-                                        if let currAcc = piggyBankUser.activeUser?.accounts[index]{
-                                            
-                                            if(currAcc.balance < (Int(transferAmount) ?? 0)){
-                                                print("hello")
-                                                transferError = true
-                                            }
-                                            else{
-                                                let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
-                                                
-                                                piggyBankUser.activeUser = apiResp.user
-                                            }
-                                            /*
-                                            let apiResp = try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: currAcc, to: sendAcc, amountInCents: Int(transferAmount) ?? 0 )
-                                            
-                                            piggyBankUser.activeUser = apiResp.user
-                                             */
-                                        }
-                                    }
-                                }
-                            }, label: {
-                                Text("Transfer Amount to: \(accountName)")
-                            })
-                            .alert("Transfer Amount is Too Large", isPresented: $transferError) {
-                                    Button("Dismiss", role: .cancel) { }
-                                }
-                        }
 
+struct TransferSheet: View {
+        @State var transferAmount: Double = 0.00
+        @State var selectedAccountIndex: Int?
+        @State var currentIndexofthecurrentuser: Int
+        @EnvironmentObject var piggyBankUser: PiggyBankUser
+        @State var navigateToAccountDetails = false
+        @State var theamounttopass: Double
+        @State var thealertforinvalid = false
+        @State var pleaseselectaccount = false
+        
+        var body: some View {
+            Spacer()
+                .frame(height: 20)
+            TextField("Transfer Amount", value: $transferAmount, formatter: NumberFormatter())
+                .frame(width: 300)
+                .padding(.all)
+                .background(.white)
+                .cornerRadius(roundedCornerRadius)
+            
+            Spacer()
+                .frame(height: 20)
+        
+            Button("Transfer") {
+                //Button press action
+                guard let theacount = selectedAccountIndex else {
+                    thealertforinvalid = true
+                    return}
+                
+                guard let theselectedaccount = piggyBankUser.activeUser?.accounts[theacount] else {
+                    print("not a valid account")
+                    return
+                }
+                
+                
+                
+                if transferAmount <= 0 {
+                    thealertforinvalid = true
+                } else {
+                    Task {
+                        do {
+                            piggyBankUser.loadUserAuthToken()
+                            guard let originalAccount = piggyBankUser.activeUser?.accounts[currentIndexofthecurrentuser] else {
+                                print("No original account exists")
+                                return
+                            }
+                            try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: originalAccount, to: theselectedaccount, amountInCents: Int(transferAmount * 100))
+                        }
                     }
                 }
                 
+                if transferAmount > theamounttopass {
+                    thealertforinvalid = true
+                }
+
             }
+            .font(.custom(appFont, size: 18.0))
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.all)
+            .background(Color(buttonBackgroundColor))
+            .cornerRadius(roundedCornerRadius)
+            
+            
+            
+            Form {
+                    Section {
+                            if let numAccounts = piggyBankUser.activeUser?.accounts.count {
+                                ForEach(0..<numAccounts, id: \.self) { index in
+                                    let accountName = piggyBankUser.activeUser?.accounts[index].name ?? ""
+                                    Button(action: {
+                                        selectedAccountIndex = index
+                                    }) {
+                                        HStack {
+                                            Text(accountName)
+                                            Spacer()
+                                            if let balance = piggyBankUser.activeUser?.accounts[index].balanceString() {
+                                                Text("\(balance)")
+                                                    .foregroundColor(.gray)
+                                            }
+                                        }
+                                    }
+                                    .foregroundColor(selectedAccountIndex == index ? .blue : .black)
+                                    .background(selectedAccountIndex == index ? Color.blue.opacity(0.2) : Color.clear)
+                                }
+                            }
+                        }
+                }
+
+            .background(Color(appBackgroundColor))
+            .scrollContentBackground(.hidden)
+
+            .alert(isPresented: $thealertforinvalid) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("Transfer amount cannot exceed the available amount, it also cannot be negative, also make sure to choose an account"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+
         }
-        .background(Color(appBackgroundColor))
-        .scrollContentBackground(.hidden
     }
-}
-
-
-
-//#Preview {
-//    AccountDetails()
-//}
