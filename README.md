@@ -1,7 +1,7 @@
 # PiggyBank
 
 Ashley Valdez (Student ID: 919741751) \
-Chitra Mukerjee (Student ID: 919449008) \
+Chitra Mukherjee (Student ID: 919449008) \
 Shubhada Martha (Student ID: 919508091) \
 Sukhpreet Aulakh (Student ID: 919398858)
 
