@@ -1,7 +1,9 @@
 # PiggyBank
 
-Created by Ashley Valdez \
-Student ID: 919741751
+Ashley Valdez (Student ID: 919741751)
+Chitra Mukerjee (Student ID: 919449008)
+Shubhada Martha (Student ID: 919508091)
+Sukhpreet Aulakh (Student ID: 919398858)
 
 ## About PiggyBank
 PiggyBank is mobile wallet app that allows you to safely store you debit and credit cards at your best interest and keep your piggybank happy and full (pun intended) 🐷💰!
@@ -19,26 +21,20 @@ PiggyBank contains a login page with the following features
 - Invalid OTP Verification Code Alert
 - Account Information Display On Home Page
 - Account Settings Management
+- Deposit, Withdraw, Transfer Money To Accounts
+- Account Creation & Deletion
 
 ### Country Code Selection
 PiggyBank's login screen displays a dropdown menu listing country codes that users can select from.
 
-<img src="https://github.com/macintAsh1984/PiggyBank/assets/84110959/305d9093-1a3f-4ac5-86c7-e4879c2275ef" width="322.5" height="699" />
-
 ### Number Keypad Dismissal
 When the textfield to enter a phone number is selected, a numberkey pad appears for users to enter a phone number to login. Users can tap out of the textfield or click the **Get Verification Code** button to dismiss the number keypad.
-
-<img src="https://github.com/macintAsh1984/PiggyBank/assets/84110959/8785fc69-d10f-4100-a455-f880821809e3" width="322.5" height="699" />
 
 ### Phone Number Formatting
 PiggyBank's login page also formats user's phone numbers as they type it into the textfield.
 
-<img src="https://github.com/macintAsh1984/PiggyBank/assets/84110959/0036a853-90f2-45b0-8503-4b3b3260115c" width="322.5" height="699" />
-
 ### Invalid Phone Number Alert
 When users mistype their phone, whether they enter accidentally hit **Get Verification Code** button by mistake or enter too many or too little digits, they are presented with an alert that have entered an invalid phone number.
-
-<img src="https://github.com/macintAsh1984/PiggyBank/assets/84110959/d12d706c-89bb-4097-a1ae-dc54f9a8698d" width="322.5" height="699" />
 
 ### Phone Verification via OTP
 When users enter a valid phone number, they are taken to a verification screen that prompts them to enter a six-digit One Time Passcode (OTP) in an OTP-style textfield. If the code is entered in correctly, they are taken to PiggyBank's home screen.
@@ -56,6 +52,12 @@ Once new PiggyBank users have verified their account or existing users return to
 PiggyBank users have the ability to edit their account information in the Settings page. The Settings page allows them to:
 - Edit and save their account usernames
 - Logout of their account.
+
+### Deposit, Withdraw, Transfer Money To Accounts
+PiggyBank users with active accounts can deposit, withdraw, and transfer money across accounts.
+
+### Account Creation & Deletion
+PiggyBank users can create new accounts and delete accounts they no longer need.
 
 ## Feature Implementations
 
@@ -292,4 +294,109 @@ In terms of logging out of PiggyBank, when tapping the **LogOut** button in the 
         self.authToken = nil
         self.activeUser = nil
     }
+```
+
+For depositing money into an account, when PiggyBank users select the **Deposit** option in the **More** menu options of the **Account Details** page, a sheet prompts them to enter the amount of money they would like to deposit. Upon entering that amount, an API call to the `deposit()` method is made and the sheet is dismissed with the user's account reflected a new balance with the deposted money (as shown in the code snippet below):
+
+```swift
+            if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                Task{
+                    let apiResp = try await Api.shared.deposit(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(depositAmount) ?? 0)
+                    
+                    piggyBankUser.activeUser = apiResp.user
+
+                }
+            }
+            
+        }
+```
+
+The implement for withdrawing money, is similar to that of depositing money, except an API call to the `withdraw()` method is made and an alert is thrown is the user attempts to withdraw more than the account balance (as shown in the code snippet below):
+
+```swift
+        Button("Withdraw") {
+            if let currAcc = piggyBankUser.activeUser?.accounts[index]{
+                if (currAcc.balance < (Int(withdrawAmount) ?? 0)) {
+                    invalidWithdrawAmt = true
+                } else {
+                    Task {
+                        let apiResp = try await Api.shared.withdraw(authToken: piggyBankUser.authToken ?? "", account: currAcc, amountInCents: Int(withdrawAmount) ?? 0)
+                        
+                        piggyBankUser.activeUser = apiResp.user
+
+                    }
+                }
+            }
+            
+        }
+```
+
+For transferring money across different accounts, when PiggyBank users select the **Transfer** option in the **More** menu options of the **Account Details** page, the account the PiggyBank user selected is in found, the PiggyBank user's authentication token is retrieved from disk, the account we are transfering from is also found, and we pass in the account the user is currently on as well as the account they would like to transfer to into the API call for the `transfer()` method. An alert is displayed if a user attempts withdraw more than their account balance or enter a negative number.
+
+```swift
+            Button("Transfer") {
+                //Button press action
+                guard let theacount = selectedAccountIndex else {
+                    thealertforinvalid = true
+                    return}
+                
+                guard let theselectedaccount = piggyBankUser.activeUser?.accounts[theacount] else {
+                    print("not a valid account")
+                    return
+                }
+
+                if transferAmount <= 0 {
+                    thealertforinvalid = true
+                } else {
+                    Task {
+                        do {
+                            piggyBankUser.loadUserAuthToken()
+                            guard let originalAccount = piggyBankUser.activeUser?.accounts[currentIndexofthecurrentuser] else {
+                                print("No original account exists")
+                                return
+                            }
+                            try await Api.shared.transfer(authToken: piggyBankUser.authToken ?? "", from: originalAccount, to: theselectedaccount, amountInCents: Int(transferAmount * 100))
+                        }
+                    }
+                }
+                
+                if transferAmount > theamounttopass {
+                    thealertforinvalid = true
+                }
+
+            }
+```
+
+When PiggyBank users click the **Add Account** button from the **Settings** menu options, a sheet appears prompting them to enter an account name. When the user clicks **Create Account**, the User View Model method `createNewAccount()` is called to make the new account and add to the Home Page (as shown in the code snippet below):
+
+```swift
+        Button("Create Account") {
+            Task {
+                try await piggyBankUser.createNewAccount(accountName:accountName)
+            }
+            dismiss()
+        }
+```
+
+For deleting an account, using the `.onAppear` modifier, the current account the user wishes to delete is retrieved by making the API call `user()` and is then store in a variable called `accountName`. When the PiggyBank user taps on **Delete Account** in the **More** menu options, the User View Model method `deleteAccount()` is called, removes the account, and reflects the account removal change on the Home page (as shown in the code snippet below):
+
+```swift
+        Button(role: .destructive) {
+            if let account = accountName {
+                Task {
+                    do {
+                        try await piggyBankUser.deleteAccount(accountName: account)
+                        navigatetoHome = true
+                        
+                    } catch {
+                        print ("Error deleting")
+                    }
+                }
+            } else {
+                print("Error: Account is nil")
+            }
+           
+        } label: {
+            Label("Delete Account", systemImage: "trash")
+        }
 ```
